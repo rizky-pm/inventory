@@ -1,8 +1,9 @@
+import SectionWrapper from '@/components/SectionWrapper';
 import React from 'react';
 
 const HomePage = () => {
   return (
-    <section>
+    <SectionWrapper>
       <h1>Home Page</h1>
       <p>
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Distinctio
@@ -10,7 +11,7 @@ const HomePage = () => {
         nam consectetur voluptates numquam accusantium aliquid fugiat quasi
         tempora repellendus eius.
       </p>
-    </section>
+    </SectionWrapper>
   );
 };
 

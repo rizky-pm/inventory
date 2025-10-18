@@ -1,0 +1,272 @@
+[
+  {
+    "id": 1,
+    "sku": "01K7PXVGVM6C0878YY24Q99FVW",
+    "name": "Kale Salad Kit",
+    "description": "Ready-to-eat salad with kale, lemon, and cheese.",
+    "stock": 44,
+    "created_at": "5/25/2025",
+    "updated_at": "3/17/2025"
+  },
+  {
+    "id": 2,
+    "sku": "01K7PXVGWDBQX7NVATRQZ7V7X3",
+    "name": "Party Mini Dress",
+    "description": "Eye-catching mini dress with sequins, ideal for party nights out.",
+    "stock": 45,
+    "created_at": "1/26/2025",
+    "updated_at": "2/16/2025"
+  },
+  {
+    "id": 3,
+    "sku": "01K7PXVGWE6YT6Z94W6EN20WPE",
+    "name": "Insulated Lunch Box",
+    "description": "Durable lunch box designed to keep food fresh and cool.",
+    "stock": 43,
+    "created_at": "3/26/2025",
+    "updated_at": "4/18/2025"
+  },
+  {
+    "id": 4,
+    "sku": "01K7PXVGWENNNEZWTG80Q5DK5B",
+    "name": "Woven Storage Baskets",
+    "description": "Stylish baskets for organizing various items in your home.",
+    "stock": 4,
+    "created_at": "10/16/2024",
+    "updated_at": "12/15/2024"
+  },
+  {
+    "id": 5,
+    "sku": "01K7PXVGWFJERX431SJA73B8KZ",
+    "name": "Cable Knit Beanie",
+    "description": "A cozy cable knit beanie to keep your head warm in winter.",
+    "stock": 16,
+    "created_at": "8/17/2025",
+    "updated_at": "8/19/2025"
+  },
+  {
+    "id": 6,
+    "sku": "01K7PXVGWFWY75B5CE7F3YZV4D",
+    "name": "Peach Green Tea",
+    "description": "Refreshing green tea infused with peach, perfect for a hot day.",
+    "stock": 48,
+    "created_at": "2/15/2025",
+    "updated_at": "12/6/2024"
+  },
+  {
+    "id": 7,
+    "sku": "01K7PXVGWH7KFH6GGPX6XJ0ZR1",
+    "name": "Vegan Protein Powder",
+    "description": "Plant-based protein powder for post-workout recovery.",
+    "stock": 4,
+    "created_at": "1/3/2025",
+    "updated_at": "9/25/2025"
+  },
+  {
+    "id": 8,
+    "sku": "01K7PXVGWJ2T596ZDVYVNZK5F2",
+    "name": "Beef Stew Meat",
+    "description": "Tender beef chunks for slow-cooked stews.",
+    "stock": 49,
+    "created_at": "7/16/2025",
+    "updated_at": "10/28/2024"
+  },
+  {
+    "id": 9,
+    "sku": "01K7PXVGWJHZZ7YQ5PJTBDXP8E",
+    "name": "Foldable Yoga Mat Carry Bag",
+    "description": "Durable bag for carrying your yoga mat and accessories.",
+    "stock": 45,
+    "created_at": "10/10/2025",
+    "updated_at": "7/3/2025"
+  },
+  {
+    "id": 10,
+    "sku": "01K7PXVGWKFFY9A1WH1GHH97P6",
+    "name": "Fruit and Nut Medley",
+    "description": "A healthy mix of assorted dried fruits and nuts for snacking.",
+    "stock": 45,
+    "created_at": "2/25/2025",
+    "updated_at": "10/31/2024"
+  },
+  {
+    "id": 11,
+    "sku": "01K7PXVGWMKEMCX0AHXB8RW0WV",
+    "name": "Vegetarian Stir Fry Sauce",
+    "description": "Flavorful sauce perfect for stir-frying vegetables and tofu.",
+    "stock": 4,
+    "created_at": "4/12/2025",
+    "updated_at": "2/12/2025"
+  },
+  {
+    "id": 12,
+    "sku": "01K7PXVGWM68E6HCFZ7JR6138E",
+    "name": "Natural Fruit Snacks",
+    "description": "Healthy fruit snacks, made with real fruit.",
+    "stock": 16,
+    "created_at": "12/22/2024",
+    "updated_at": "5/14/2025"
+  },
+  {
+    "id": 13,
+    "sku": "01K7PXVGWNZ7Q1ATZ8WCD9D29Z",
+    "name": "Mechanical Keyboard",
+    "description": "High-performance mechanical keyboard with customizable RGB.",
+    "stock": 28,
+    "created_at": "8/8/2025",
+    "updated_at": "8/30/2025"
+  },
+  {
+    "id": 14,
+    "sku": "01K7PXVGWPEX1APXMESX1PZG2N",
+    "name": "Granulated Sugar",
+    "description": "Fine granulated sugar for all your baking needs.",
+    "stock": 30,
+    "created_at": "5/21/2025",
+    "updated_at": "3/29/2025"
+  },
+  {
+    "id": 15,
+    "sku": "01K7PXVGWP0Z1FCP6G83V3Z2PW",
+    "name": "Sports Windbreaker",
+    "description": "Lightweight windbreaker for outdoor activities.",
+    "stock": 31,
+    "created_at": "5/24/2025",
+    "updated_at": "5/11/2025"
+  },
+  {
+    "id": 16,
+    "sku": "01K7PXVGWQGAT24WW8R4PBWERB",
+    "name": "Car Windshield Sun Shade",
+    "description": "Protects car interior from sun damage and heat.",
+    "stock": 48,
+    "created_at": "8/31/2025",
+    "updated_at": "2/26/2025"
+  },
+  {
+    "id": 17,
+    "sku": "01K7PXVGWQ6G54H4ZK5SG3309Z",
+    "name": "Watering Can with Nozzle",
+    "description": "Stylish watering can for plants with easy pouring nozzle.",
+    "stock": 30,
+    "created_at": "3/13/2025",
+    "updated_at": "11/30/2024"
+  },
+  {
+    "id": 18,
+    "sku": "01K7PXVGWR68W82H4CNPACP37B",
+    "name": "Oats",
+    "description": "Organic rolled oats, great for breakfast or baking.",
+    "stock": 24,
+    "created_at": "4/28/2025",
+    "updated_at": "7/13/2025"
+  },
+  {
+    "id": 19,
+    "sku": "01K7PXVGWSW42K65ZG3CWW7W2F",
+    "name": "Bluetooth Tracker",
+    "description": "Smart tracker to locate keys or other items via app.",
+    "stock": 50,
+    "created_at": "4/8/2025",
+    "updated_at": "3/27/2025"
+  },
+  {
+    "id": 20,
+    "sku": "01K7PXVGWSZKSY40HSY9GWKCTD",
+    "name": "LED Strip Light Kit",
+    "description": "Flexible light strips for creative home decor.",
+    "stock": 47,
+    "created_at": "11/2/2024",
+    "updated_at": "8/22/2025"
+  },
+  {
+    "id": 21,
+    "sku": "01K7PXVGWT02F8YG83FKX4XK52",
+    "name": "Teriyaki Beef Strips",
+    "description": "Marinated beef strips in teriyaki sauce for easy grilling.",
+    "stock": 3,
+    "created_at": "4/16/2025",
+    "updated_at": "3/17/2025"
+  },
+  {
+    "id": 22,
+    "sku": "01K7PXVGWTHEX0GJBTKYR70VHY",
+    "name": "Banana Chips",
+    "description": "Crunchy and sweet banana chips, a great on-the-go snack.",
+    "stock": 42,
+    "created_at": "6/1/2025",
+    "updated_at": "2/2/2025"
+  },
+  {
+    "id": 23,
+    "sku": "01K7PXVGWVH0DX529D1RZWH77N",
+    "name": "Organic Almonds",
+    "description": "Crunchy and nutritious almonds, perfect for snacking.",
+    "stock": 34,
+    "created_at": "9/24/2025",
+    "updated_at": "5/4/2025"
+  },
+  {
+    "id": 24,
+    "sku": "01K7PXVGWWR6KFPTR4XEJ3TCJG",
+    "name": "Reclining Camping Chair",
+    "description": "Foldable reclining camping chair with cup holder.",
+    "stock": 43,
+    "created_at": "1/1/2025",
+    "updated_at": "12/2/2024"
+  },
+  {
+    "id": 25,
+    "sku": "01K7PXVGWXA0T0EAWQXGGJ0QK7",
+    "name": "Peach Slices (canned)",
+    "description": "Juicy peach slices in syrup, perfect for desserts.",
+    "stock": 48,
+    "created_at": "12/13/2024",
+    "updated_at": "6/24/2025"
+  },
+  {
+    "id": 26,
+    "sku": "01K7PXVGWYZ6JMA8W0SJWTF4AZ",
+    "name": "Vegan Tacos",
+    "description": "Frozen vegan tacos filled with plant-based protein and spices.",
+    "stock": 13,
+    "created_at": "1/28/2025",
+    "updated_at": "11/11/2024"
+  },
+  {
+    "id": 27,
+    "sku": "01K7PXVGWY3Q3Y66G7RS2BESZK",
+    "name": "Comfort Flats",
+    "description": "Everyday flats that combine comfort and style.",
+    "stock": 35,
+    "created_at": "12/21/2024",
+    "updated_at": "1/3/2025"
+  },
+  {
+    "id": 28,
+    "sku": "01K7PXVGWZSS2JGXKYBC18CW4D",
+    "name": "Classic Cheeseburger Mix",
+    "description": "All-in-one mix for easy homemade cheeseburgers, just add ground beef.",
+    "stock": 8,
+    "created_at": "12/24/2024",
+    "updated_at": "8/13/2025"
+  },
+  {
+    "id": 29,
+    "sku": "01K7PXVGWZZ9M5MSAK5JGX5133",
+    "name": "Garlic Herb Seasoning",
+    "description": "A blend of herbs and garlic for seasoning meats and vegetables.",
+    "stock": 8,
+    "created_at": "12/11/2024",
+    "updated_at": "1/3/2025"
+  },
+  {
+    "id": 30,
+    "sku": "01K7PXVGX0HV53TSPNWEXHDFMK",
+    "name": "Portable Laptop Table",
+    "description": "Foldable table for working with laptops anywhere.",
+    "stock": 15,
+    "created_at": "12/5/2024",
+    "updated_at": "10/30/2024"
+  }
+]
