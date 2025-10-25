@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import api from '..';
+import { publicApi } from '..';
 
 type TypeSignInUser = {
   username: string;
@@ -25,7 +25,7 @@ type TypeSignInUserResponse = {
 export const useSignInUser = () => {
   return useMutation({
     mutationFn: async (credentials: TypeSignInUser) => {
-      const response = await api.post<TypeSignInUserResponse>(
+      const response = await publicApi.post<TypeSignInUserResponse>(
         '/auth/login',
         credentials
       );

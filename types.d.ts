@@ -7,3 +7,13 @@ export interface IUserAuth {
   refresh_token: string;
   refresh_token_expired: number;
 }
+
+export interface IProduct {
+  id: string;
+  sku: string;
+  name: string;
+  description: string;
+  stock: number;
+  created_at: string;
+  updated_at: string;
+}
