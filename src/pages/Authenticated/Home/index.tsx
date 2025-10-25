@@ -24,10 +24,17 @@ const HomePage = () => {
 
   const user: IUserAuth = JSON.parse(localStorage.getItem('user') || 'null');
 
-  const { data: productResonse, isLoading } = useGetProducts({
+  const {
+    data: productResonse,
+    isLoading,
+    isSuccess,
+  } = useGetProducts({
     page: pagination.pageIndex,
     size: pagination.pageSize,
   });
+
+  console.log(productResonse?.data);
+  // console.log(isSuccess);
 
   return (
     <>
@@ -52,14 +59,17 @@ const HomePage = () => {
               </Button>
             </div>
 
-            {productResonse?.data ? (
+            {isSuccess && (
               <DataTable
+                key={pagination.pageIndex} // optional but helps force update
                 data={productResonse.data}
                 columns={columns}
                 pagination={pagination}
                 setPagination={setPagination}
+                isLoading={isLoading}
+                totalPages={1} // depends on API shape
               />
-            ) : null}
+            )}
           </div>
         )}
       </SectionWrapper>

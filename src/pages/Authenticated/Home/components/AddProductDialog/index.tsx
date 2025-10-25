@@ -9,7 +9,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
-import { type SetStateAction } from 'react';
+import { useEffect, type SetStateAction } from 'react';
 import { useForm } from 'react-hook-form';
 import { addProductSchema, type AddProductType } from './add-product.schema';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -22,20 +22,27 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Textarea } from '@/components/ui/textarea';
-import { useAddNewProduct } from '@/services/useProduct';
+import { useAddNewProduct, useEditProduct } from '@/services/useProduct';
 import { Spinner } from '@/components/ui/spinner';
 import { useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
+import type { IProduct } from 'types';
+import _ from 'lodash';
 
 interface Props {
   isDialogOpen: boolean;
   setIsDialogOpen: React.Dispatch<SetStateAction<boolean>>;
+  product?: IProduct;
 }
 
 const AddProductDialog = (props: Props) => {
-  const { isDialogOpen, setIsDialogOpen } = props;
+  const { isDialogOpen, setIsDialogOpen, product } = props;
+
   const queryClient = useQueryClient();
-  const { mutate, isPending } = useAddNewProduct();
+  const { mutate: addNewProduct, isPending: isPendingAddNewProduct } =
+    useAddNewProduct();
+  const { mutate: editProduct, isPending: isPendingEditProduct } =
+    useEditProduct();
 
   const form = useForm<AddProductType>({
     resolver: zodResolver(addProductSchema),
@@ -47,21 +54,51 @@ const AddProductDialog = (props: Props) => {
     },
   });
 
-  const onAdd = (values: AddProductType) => {
-    mutate(values, {
-      onSuccess: async () => {
-        setIsDialogOpen(false);
-        await queryClient.invalidateQueries({
-          queryKey: ['product.get-products'],
-        });
-      },
-      onError: (error) => {
-        console.error(error);
-        toast.error(
-          'Something went wrong while adding new product, please try again later.'
-        );
-      },
-    });
+  useEffect(() => {
+    if (product) {
+      form.setValue('sku', product.sku);
+      form.setValue('description', product.description);
+      form.setValue('name', product.name);
+      form.setValue('stock', _.toString(product.stock));
+    }
+  }, [product, form]);
+
+  const onSubmit = (values: AddProductType) => {
+    if (!product) {
+      addNewProduct(values, {
+        onSuccess: async () => {
+          setIsDialogOpen(false);
+          await queryClient.invalidateQueries({
+            queryKey: ['product.get-products'],
+          });
+        },
+        onError: (error) => {
+          console.error(error);
+          toast.error(
+            'Something went wrong while adding new product, please try again later.'
+          );
+        },
+      });
+    } else {
+      const body = {
+        ...values,
+        id: product.id,
+      };
+      editProduct(body, {
+        onSuccess: async () => {
+          setIsDialogOpen(false);
+          await queryClient.invalidateQueries({
+            queryKey: ['product.get-products'],
+          });
+        },
+        onError: (error) => {
+          console.error(error);
+          toast.error(
+            'Something went wrong while editting product, please try again later.'
+          );
+        },
+      });
+    }
   };
 
   return (
@@ -83,7 +120,7 @@ const AddProductDialog = (props: Props) => {
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onAdd)} className='space-y-4'>
+          <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
             <FormField
               control={form.control}
               name='sku'
@@ -91,7 +128,11 @@ const AddProductDialog = (props: Props) => {
                 <FormItem>
                   <FormLabel>SKU</FormLabel>
                   <FormControl>
-                    <Input placeholder={'Product SKU'} {...field} />
+                    <Input
+                      placeholder={'Product SKU'}
+                      autoComplete='off'
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -104,7 +145,11 @@ const AddProductDialog = (props: Props) => {
                 <FormItem>
                   <FormLabel>Name</FormLabel>
                   <FormControl>
-                    <Input placeholder={'Product name'} {...field} />
+                    <Input
+                      placeholder={'Product name'}
+                      autoComplete='off'
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -119,6 +164,7 @@ const AddProductDialog = (props: Props) => {
                   <FormControl>
                     <Textarea
                       placeholder={'Product Description'}
+                      autoComplete='off'
                       {...field}
                       maxLength={50}
                     />
@@ -134,7 +180,12 @@ const AddProductDialog = (props: Props) => {
                 <FormItem>
                   <FormLabel>Stock</FormLabel>
                   <FormControl>
-                    <Input type='number' placeholder={'99'} {...field} />
+                    <Input
+                      type='number'
+                      placeholder={'99'}
+                      autoComplete='off'
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -143,13 +194,21 @@ const AddProductDialog = (props: Props) => {
 
             <DialogFooter>
               <DialogClose asChild>
-                <Button variant='outline' disabled={isPending}>
+                <Button
+                  variant='outline'
+                  disabled={isPendingAddNewProduct || isPendingEditProduct}
+                >
                   Cancel
                 </Button>
               </DialogClose>
-              <Button type='submit' disabled={isPending}>
-                {isPending ? <Spinner /> : null}
-                Add Product
+              <Button
+                type='submit'
+                disabled={isPendingAddNewProduct || isPendingEditProduct}
+              >
+                {isPendingAddNewProduct || isPendingEditProduct ? (
+                  <Spinner />
+                ) : null}
+                {!product ? 'Add Product' : 'Edit Product'}
               </Button>
             </DialogFooter>
           </form>

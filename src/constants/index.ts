@@ -1,1 +1,1 @@
-export const IS_AUTHENTICATED = true;
+export const IS_AUTHENTICATED = false;

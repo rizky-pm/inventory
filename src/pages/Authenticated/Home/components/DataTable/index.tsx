@@ -4,7 +4,6 @@ import {
   type ColumnDef,
   flexRender,
   getCoreRowModel,
-  getPaginationRowModel,
   useReactTable,
 } from '@tanstack/react-table';
 
@@ -29,14 +28,16 @@ import {
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
-  data: TData[];
+  data: TData[] | undefined;
   pagination: {
     pageIndex: number;
     pageSize: number;
   };
+  isLoading: boolean;
   setPagination: React.Dispatch<
     SetStateAction<{ pageIndex: number; pageSize: number }>
   >;
+  totalPages?: number;
 }
 
 export function DataTable<TData, TValue>({
@@ -44,24 +45,29 @@ export function DataTable<TData, TValue>({
   data,
   pagination,
   setPagination,
+  isLoading,
+  totalPages = 1,
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
-    data,
+    data: data ?? [],
     columns,
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
+    manualPagination: true,
+    pageCount: totalPages,
     onPaginationChange: setPagination,
     state: { pagination },
   });
 
-  const totalPages = table.getPageCount();
-  const currentPage = table.getState().pagination.pageIndex + 1;
+  const currentPage = pagination.pageIndex + 1;
 
-  // Create dynamic page numbers (max 5 at a time)
   const visiblePages = Array.from(
     { length: totalPages },
     (_, i) => i + 1
   ).slice(Math.max(0, currentPage - 3), Math.min(totalPages, currentPage + 2));
+
+  if (isLoading) {
+    return <div>Loading data ...</div>;
+  }
 
   return (
     <div className='overflow-hidden rounded-md border'>
@@ -84,7 +90,7 @@ export function DataTable<TData, TValue>({
         </TableHeader>
 
         <TableBody>
-          {table.getRowModel().rows?.length ? (
+          {data && data.length > 0 ? (
             table.getRowModel().rows.map((row) => (
               <TableRow
                 key={row.id}
@@ -112,9 +118,15 @@ export function DataTable<TData, TValue>({
           <PaginationContent>
             <PaginationItem>
               <PaginationPrevious
-                onClick={() => table.previousPage()}
+                onClick={() => {
+                  if (pagination.pageIndex > 0)
+                    setPagination((prev) => ({
+                      ...prev,
+                      pageIndex: prev.pageIndex - 1,
+                    }));
+                }}
                 className={
-                  table.getCanPreviousPage()
+                  pagination.pageIndex > 0
                     ? ''
                     : 'opacity-50 cursor-not-allowed'
                 }
@@ -128,7 +140,7 @@ export function DataTable<TData, TValue>({
                   isActive={page === currentPage}
                   onClick={(e) => {
                     e.preventDefault();
-                    table.setPageIndex(page - 1);
+                    setPagination((prev) => ({ ...prev, pageIndex: page - 1 }));
                   }}
                 >
                   {page}
@@ -144,9 +156,17 @@ export function DataTable<TData, TValue>({
 
             <PaginationItem>
               <PaginationNext
-                onClick={() => table.nextPage()}
+                onClick={() => {
+                  if (pagination.pageIndex + 1 < totalPages)
+                    setPagination((prev) => ({
+                      ...prev,
+                      pageIndex: prev.pageIndex + 1,
+                    }));
+                }}
                 className={
-                  table.getCanNextPage() ? '' : 'opacity-50 cursor-not-allowed'
+                  pagination.pageIndex + 1 < totalPages
+                    ? ''
+                    : 'opacity-50 cursor-not-allowed'
                 }
               />
             </PaginationItem>

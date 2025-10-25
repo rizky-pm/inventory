@@ -12,14 +12,28 @@ type TypeGetProductsResponse = {
   data: IProduct[];
 };
 
-type TypeAddNewProductRequest = {
+interface TypeAddNewProductRequest {
   sku: string;
   name: string;
   description?: string;
   stock: string;
-};
+}
 
 interface TypeAddNewProductResponse extends IBaseResponse {
+  data: {
+    id: string;
+  };
+}
+
+interface TypeEditProductRequest extends TypeAddNewProductRequest {
+  id: string;
+}
+
+interface IDeleteProductRequest {
+  id: string;
+}
+
+interface IDeleteProductResponse extends IBaseResponse {
   data: {
     id: string;
   };
@@ -30,11 +44,13 @@ export const useGetProducts = (params: TypeGetProductsRequest) => {
     queryKey: ['product.get-products', params.page, params.size],
     queryFn: async () => {
       const response = await privateApi.get<TypeGetProductsResponse>(
-        `/products?page=${params.page}&size=${params.size}`
+        `/products`
       );
 
       return response.data;
     },
+    gcTime: 0,
+    staleTime: 0,
   });
 };
 
@@ -53,6 +69,42 @@ export const useAddNewProduct = () => {
       );
 
       return response;
+    },
+  });
+};
+
+export const useEditProduct = () => {
+  return useMutation({
+    mutationKey: ['product.edit-product'],
+    mutationFn: async (body: TypeEditProductRequest) => {
+      const payload = {
+        name: body.name,
+        sku: body.sku,
+        description: body.description,
+        stock: _.toInteger(body.stock),
+      };
+
+      const response = await privateApi.put<TypeAddNewProductResponse>(
+        `/products/${body.id}`,
+        payload
+      );
+
+      return response.data;
+    },
+  });
+};
+
+export const useDeleteProduct = () => {
+  return useMutation({
+    mutationKey: ['product.delete-product'],
+    mutationFn: async (body: IDeleteProductRequest) => {
+      const { id } = body;
+
+      const response = await privateApi.delete<IDeleteProductResponse>(
+        `/products/${id}`
+      );
+
+      return response.data;
     },
   });
 };
