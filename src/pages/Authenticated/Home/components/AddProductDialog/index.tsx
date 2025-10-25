@@ -22,6 +22,10 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Textarea } from '@/components/ui/textarea';
+import { useAddNewProduct } from '@/services/useProduct';
+import { Spinner } from '@/components/ui/spinner';
+import { useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 
 interface Props {
   isDialogOpen: boolean;
@@ -30,6 +34,8 @@ interface Props {
 
 const AddProductDialog = (props: Props) => {
   const { isDialogOpen, setIsDialogOpen } = props;
+  const queryClient = useQueryClient();
+  const { mutate, isPending } = useAddNewProduct();
 
   const form = useForm<AddProductType>({
     resolver: zodResolver(addProductSchema),
@@ -42,7 +48,20 @@ const AddProductDialog = (props: Props) => {
   });
 
   const onAdd = (values: AddProductType) => {
-    console.log(values);
+    mutate(values, {
+      onSuccess: async () => {
+        setIsDialogOpen(false);
+        await queryClient.invalidateQueries({
+          queryKey: ['product.get-products'],
+        });
+      },
+      onError: (error) => {
+        console.error(error);
+        toast.error(
+          'Something went wrong while adding new product, please try again later.'
+        );
+      },
+    });
   };
 
   return (
@@ -124,9 +143,14 @@ const AddProductDialog = (props: Props) => {
 
             <DialogFooter>
               <DialogClose asChild>
-                <Button variant='outline'>Cancel</Button>
+                <Button variant='outline' disabled={isPending}>
+                  Cancel
+                </Button>
               </DialogClose>
-              <Button type='submit'>Add Product</Button>
+              <Button type='submit' disabled={isPending}>
+                {isPending ? <Spinner /> : null}
+                Add Product
+              </Button>
             </DialogFooter>
           </form>
         </Form>

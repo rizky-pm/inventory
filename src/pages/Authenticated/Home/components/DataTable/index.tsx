@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { type SetStateAction } from 'react';
 
 import {
   type ColumnDef,
@@ -30,18 +30,21 @@ import {
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  pageSize?: number;
+  pagination: {
+    pageIndex: number;
+    pageSize: number;
+  };
+  setPagination: React.Dispatch<
+    SetStateAction<{ pageIndex: number; pageSize: number }>
+  >;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  pagination,
+  setPagination,
 }: DataTableProps<TData, TValue>) {
-  const [pagination, setPagination] = useState({
-    pageIndex: 0,
-    pageSize: 10,
-  });
-
   const table = useReactTable({
     data,
     columns,

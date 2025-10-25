@@ -17,3 +17,8 @@ export interface IProduct {
   created_at: string;
   updated_at: string;
 }
+
+export interface IBaseResponse {
+  status: 'success' | 'error' | 'failed';
+  message: string;
+}
