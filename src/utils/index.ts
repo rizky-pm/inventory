@@ -11,6 +11,7 @@ export const checkAuth = () => {
   }
 
   if (dayjs.unix(user.access_token_expired).isBefore(currentDateUnix)) {
+    localStorage.removeItem('user');
     return false;
   } else {
     return true;
