@@ -49,6 +49,15 @@ const Sidebar = () => {
         Accounts
       </NavLink>
 
+      <NavLink
+        to='/branches'
+        className={({ isActive }) =>
+          `nav-link ${isActive ? 'nav-link-active' : ''}`
+        }
+      >
+        Branches
+      </NavLink>
+
       <Button
         className='text-left flex justify-start items-start mt-auto'
         variant={'destructive'}

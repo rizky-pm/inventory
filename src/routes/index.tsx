@@ -1,6 +1,7 @@
 import AuthenticatedWrapper from '@/components/AuthenticatedWrapper';
 import UnauthenticatedWrapper from '@/components/UnauthenticatedWrapper';
 import AboutPage from '@/pages/Authenticated/About';
+import BranchesPage from '@/pages/Authenticated/Branches';
 import HomePage from '@/pages/Authenticated/Home';
 import SettingsPage from '@/pages/Authenticated/Settings';
 import SignInPage from '@/pages/Unauthenticated/SignIn';
@@ -27,6 +28,11 @@ const router = createBrowserRouter([
       {
         path: 'accounts',
         element: <SettingsPage />,
+      },
+
+      {
+        path: 'branches',
+        element: <BranchesPage />,
       },
     ],
   },
