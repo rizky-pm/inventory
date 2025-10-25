@@ -27,9 +27,16 @@ import Warehouse from '@/assets/images/warehouse-sign-in.jpg';
 import { signInSchema, type TypeSignInSchema } from './schema';
 import { TypographyH1, TypographyMuted } from '@/components/ui/typography';
 import { useState } from 'react';
+import { useSignInUser } from '@/services/useAuthentication';
+import { Spinner } from '@/components/ui/spinner';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
+import { AxiosError } from 'axios';
 
 const SignInPage = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
+  const { mutateAsync: signInUser, isPending } = useSignInUser();
 
   const signInForm = useForm<TypeSignInSchema>({
     resolver: zodResolver(signInSchema),
@@ -40,7 +47,28 @@ const SignInPage = () => {
   });
 
   const onSignIn = (values: TypeSignInSchema) => {
-    console.log(values);
+    signInUser(values, {
+      onSuccess: (response) => {
+        const data = {
+          ...response.data.user,
+          ...response.data.tokens,
+        };
+
+        console.log(response.data.user);
+        localStorage.setItem('user', JSON.stringify(data));
+        navigate('/', { replace: true });
+      },
+      onError: (error) => {
+        if (error instanceof AxiosError) {
+          const message = error.response?.data?.message;
+          console.error(message);
+          toast.error(message);
+        } else {
+          console.error(error);
+          toast.error('Unexpected error, please try again later.');
+        }
+      },
+    });
   };
 
   return (
@@ -100,7 +128,8 @@ const SignInPage = () => {
                       </FormItem>
                     )}
                   />
-                  <Button type='submit' className='w-full'>
+                  <Button type='submit' className='w-full' disabled={isPending}>
+                    {isPending ? <Spinner /> : null}
                     Sign in
                   </Button>
 

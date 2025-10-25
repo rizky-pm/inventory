@@ -1,9 +1,11 @@
-import { IS_AUTHENTICATED } from '@/constants';
 import { Navigate, Outlet } from 'react-router-dom';
 import Sidebar from './Sidebar';
+import { checkAuth } from '@/utils';
 
 const AuthenticatedWrapper = () => {
-  return IS_AUTHENTICATED ? (
+  const isAuthenticated = checkAuth();
+
+  return isAuthenticated ? (
     <main className='flex'>
       <Sidebar />
       <Outlet />

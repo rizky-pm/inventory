@@ -1,9 +1,16 @@
 import { LogOut } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Separator } from '../ui/separator';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 const Sidebar = () => {
+  const navigate = useNavigate();
+
+  const onClickSignOut = () => {
+    localStorage.removeItem('user');
+    navigate('/auth/sign-in', { replace: true });
+  };
+
   return (
     <nav className='w-[300px] h-screen p-4 border-r bg-sidebar text-sidebar-foreground flex flex-col gap-2'>
       <span className='font-bold text-4xl tracking-tighter'>inventory</span>
@@ -25,7 +32,7 @@ const Sidebar = () => {
         About
       </NavLink>
       <NavLink
-        to='/messages'
+        to='/settings'
         className={({ isActive }) =>
           `nav-link ${isActive ? 'nav-link-active' : ''}`
         }
@@ -33,9 +40,19 @@ const Sidebar = () => {
         Setting
       </NavLink>
 
+      <NavLink
+        to='/accounts'
+        className={({ isActive }) =>
+          `nav-link ${isActive ? 'nav-link-active' : ''}`
+        }
+      >
+        Accounts
+      </NavLink>
+
       <Button
         className='text-left flex justify-start items-start mt-auto'
         variant={'destructive'}
+        onClick={onClickSignOut}
       >
         <LogOut />
         Sign out
