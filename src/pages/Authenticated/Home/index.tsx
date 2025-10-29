@@ -1,84 +1,17 @@
 import SectionWrapper from '@/components/SectionWrapper';
-import { DataTable } from './components/DataTable';
-import { columns } from './components/DataTable/columns';
-import SearchProduct from './components/SearchProduct';
-import { Button } from '@/components/ui/button';
-import { Plus } from 'lucide-react';
-import AddProductDialog from './components/AddProductDialog';
-import { useState } from 'react';
-import { TypographyH3 } from '@/components/ui/typography';
-import type { IUserAuth } from 'types';
-
-import _ from 'lodash';
-import { useGetProducts } from '@/services/useProduct';
+import React from 'react';
 
 const HomePage = () => {
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [pagination, setPagination] = useState<{
-    pageIndex: number;
-    pageSize: number;
-  }>({
-    pageIndex: 1,
-    pageSize: 10,
-  });
-
-  const user: IUserAuth = JSON.parse(localStorage.getItem('user') || 'null');
-
-  const {
-    data: productResonse,
-    isLoading,
-    isSuccess,
-  } = useGetProducts({
-    page: pagination.pageIndex,
-    size: pagination.pageSize,
-  });
-
-  console.log(productResonse?.data);
-  // console.log(isSuccess);
-
   return (
-    <>
-      <SectionWrapper>
-        <TypographyH3>Hello, {_.startCase(user.full_name)}</TypographyH3>
-
-        {isLoading ? (
-          <p>Loading data...</p>
-        ) : (
-          <div className='container mx-auto py-4 space-y-2'>
-            <div className='flex justify-between items-end'>
-              <SearchProduct />
-
-              <Button
-                aria-label='Add product'
-                onClick={() => {
-                  setIsDialogOpen(true);
-                }}
-              >
-                Add product
-                <Plus />
-              </Button>
-            </div>
-
-            {isSuccess && (
-              <DataTable
-                key={pagination.pageIndex} // optional but helps force update
-                data={productResonse.data}
-                columns={columns}
-                pagination={pagination}
-                setPagination={setPagination}
-                isLoading={isLoading}
-                totalPages={1} // depends on API shape
-              />
-            )}
-          </div>
-        )}
-      </SectionWrapper>
-
-      <AddProductDialog
-        isDialogOpen={isDialogOpen}
-        setIsDialogOpen={setIsDialogOpen}
-      />
-    </>
+    <SectionWrapper>
+      <h1>Home Page</h1>
+      <p>
+        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Optio
+        molestiae aspernatur cum accusamus. A molestiae odit qui aperiam sed?
+        Possimus a placeat minus accusamus suscipit alias maiores pariatur
+        quisquam vel!
+      </p>
+    </SectionWrapper>
   );
 };
 

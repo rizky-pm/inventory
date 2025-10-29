@@ -58,7 +58,7 @@ export function DataTable<TData, TValue>({
     state: { pagination },
   });
 
-  const currentPage = pagination.pageIndex + 1;
+  const currentPage = pagination.pageIndex;
 
   const visiblePages = Array.from(
     { length: totalPages },
@@ -68,6 +68,9 @@ export function DataTable<TData, TValue>({
   if (isLoading) {
     return <div>Loading data ...</div>;
   }
+
+  console.log(pagination.pageIndex);
+  console.log(totalPages);
 
   return (
     <div className='overflow-hidden rounded-md border'>
@@ -139,8 +142,9 @@ export function DataTable<TData, TValue>({
                   href='#'
                   isActive={page === currentPage}
                   onClick={(e) => {
+                    console.log('click');
                     e.preventDefault();
-                    setPagination((prev) => ({ ...prev, pageIndex: page - 1 }));
+                    setPagination((prev) => ({ ...prev, pageIndex: page }));
                   }}
                 >
                   {page}
@@ -157,14 +161,14 @@ export function DataTable<TData, TValue>({
             <PaginationItem>
               <PaginationNext
                 onClick={() => {
-                  if (pagination.pageIndex + 1 < totalPages)
+                  if (pagination.pageIndex < totalPages)
                     setPagination((prev) => ({
                       ...prev,
                       pageIndex: prev.pageIndex + 1,
                     }));
                 }}
                 className={
-                  pagination.pageIndex + 1 < totalPages
+                  pagination.pageIndex < totalPages
                     ? ''
                     : 'opacity-50 cursor-not-allowed'
                 }

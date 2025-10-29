@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { privateApi } from '..';
-import type { IBaseResponse, IProduct } from 'types';
+import type { IBaseResponse, IProduct } from '@/types';
 import _ from 'lodash';
 
 type TypeGetProductsRequest = {
@@ -10,6 +10,12 @@ type TypeGetProductsRequest = {
 
 type TypeGetProductsResponse = {
   data: IProduct[];
+
+  meta: {
+    page: number;
+    size: number;
+    total_page: number;
+  };
 };
 
 interface TypeAddNewProductRequest {
@@ -44,7 +50,7 @@ export const useGetProducts = (params: TypeGetProductsRequest) => {
     queryKey: ['product.get-products', params.page, params.size],
     queryFn: async () => {
       const response = await privateApi.get<TypeGetProductsResponse>(
-        `/products`
+        `/products?page=${params.page}&size=${10}`
       );
 
       return response.data;

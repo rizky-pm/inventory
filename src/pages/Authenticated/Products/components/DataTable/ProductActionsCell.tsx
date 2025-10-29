@@ -7,7 +7,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { MoreHorizontal } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import type { IProduct } from 'types';
+import type { IProduct } from '@/types';
 import AddProductDialog from '../AddProductDialog';
 import { useState } from 'react';
 import { DeleteProductDialog } from '../DeleteDialog';

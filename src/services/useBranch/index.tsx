@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { privateApi } from '..';
-import type { IBaseResponse, IBranch } from 'types';
+import type { IBaseResponse, IBranch } from '@/types';
 
 interface IGetBranchesRequest {
   page: number;

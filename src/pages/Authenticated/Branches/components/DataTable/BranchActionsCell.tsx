@@ -7,7 +7,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { MoreHorizontal } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import type { IBranch } from 'types';
+import type { IBranch } from '@/types';
 import { useState } from 'react';
 import AddBranchDialog from '../AddBranchDialog';
 import { DeleteBranchDialog } from '../DeleteBranchDialog';

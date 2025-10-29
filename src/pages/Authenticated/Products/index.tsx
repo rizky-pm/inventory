@@ -1,14 +1,18 @@
 import SectionWrapper from '@/components/SectionWrapper';
-import { Button } from '@/components/ui/button';
-import { TypographyH3 } from '@/components/ui/typography';
-import { useGetBranches } from '@/services/useBranch';
-import { Plus } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
 import { DataTable } from './components/DataTable';
 import { columns } from './components/DataTable/columns';
-import AddBranchDialog from './components/AddBranchDialog';
+import SearchProduct from './components/SearchProduct';
+import { Button } from '@/components/ui/button';
+import { Plus } from 'lucide-react';
+import AddProductDialog from './components/AddProductDialog';
+import { useEffect, useState } from 'react';
+import { TypographyH3 } from '@/components/ui/typography';
+import type { IUserAuth } from '@/types';
 
-const BranchesPage = () => {
+import _ from 'lodash';
+import { useGetProducts } from '@/services/useProduct';
+
+const ProductsPage = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [pagination, setPagination] = useState<{
     pageIndex: number;
@@ -18,12 +22,14 @@ const BranchesPage = () => {
     pageSize: 10,
   });
 
+  const user: IUserAuth = JSON.parse(localStorage.getItem('user') || 'null');
+
   const {
-    data: branchResponse,
+    data: productResonse,
     isLoading,
     isSuccess,
     refetch,
-  } = useGetBranches({
+  } = useGetProducts({
     page: pagination.pageIndex,
     size: pagination.pageSize,
   });
@@ -37,21 +43,22 @@ const BranchesPage = () => {
   return (
     <>
       <SectionWrapper>
-        <TypographyH3>List of branch</TypographyH3>
+        <TypographyH3>Hello, {_.startCase(user.full_name)}</TypographyH3>
+
         {isLoading ? (
           <p>Loading data...</p>
         ) : (
           <div className='container mx-auto py-4 space-y-2'>
             <div className='flex justify-between items-end'>
-              {/* <SearchProduct /> */}
+              <SearchProduct />
 
               <Button
-                aria-label='Add branch'
+                aria-label='Add product'
                 onClick={() => {
                   setIsDialogOpen(true);
                 }}
               >
-                Add branch
+                Add product
                 <Plus />
               </Button>
             </div>
@@ -59,19 +66,19 @@ const BranchesPage = () => {
             {isSuccess && (
               <DataTable
                 key={pagination.pageIndex} // optional but helps force update
-                data={branchResponse.data}
+                data={productResonse.data}
                 columns={columns}
                 pagination={pagination}
                 setPagination={setPagination}
                 isLoading={isLoading}
-                totalPages={1} // depends on API shape
+                totalPages={productResonse.meta.total_page} // depends on API shape
               />
             )}
           </div>
         )}
       </SectionWrapper>
 
-      <AddBranchDialog
+      <AddProductDialog
         isDialogOpen={isDialogOpen}
         setIsDialogOpen={setIsDialogOpen}
       />
@@ -79,4 +86,4 @@ const BranchesPage = () => {
   );
 };
 
-export default BranchesPage;
+export default ProductsPage;

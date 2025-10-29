@@ -1,4 +1,4 @@
-import { type IUserAuth } from './../../types.d';
+import { type IUserAuth } from '@/types';
 import dayjs from 'dayjs';
 
 export const checkAuth = () => {
@@ -16,4 +16,10 @@ export const checkAuth = () => {
   } else {
     return true;
   }
+};
+
+export const getAuth = () => {
+  const user: IUserAuth = JSON.parse(localStorage.getItem('user') || 'null');
+
+  return user;
 };

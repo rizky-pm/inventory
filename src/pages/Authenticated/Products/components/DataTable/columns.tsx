@@ -1,12 +1,8 @@
 import { type ColumnDef } from '@tanstack/react-table';
-import type { IProduct } from 'types';
+import type { IProduct } from '@/types';
 import ProductActionsCell from './ProductActionsCell';
 
 export const columns: ColumnDef<IProduct>[] = [
-  {
-    accessorKey: 'id',
-    header: 'ID',
-  },
   {
     accessorKey: 'sku',
     header: 'SKU',

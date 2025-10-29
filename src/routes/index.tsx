@@ -3,6 +3,7 @@ import UnauthenticatedWrapper from '@/components/UnauthenticatedWrapper';
 import AboutPage from '@/pages/Authenticated/About';
 import BranchesPage from '@/pages/Authenticated/Branches';
 import HomePage from '@/pages/Authenticated/Home';
+import ProductsPage from '@/pages/Authenticated/Products';
 import SettingsPage from '@/pages/Authenticated/Settings';
 import SignInPage from '@/pages/Unauthenticated/SignIn';
 import { createBrowserRouter } from 'react-router-dom';
@@ -15,6 +16,10 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <HomePage />,
+      },
+      {
+        path: 'products',
+        element: <ProductsPage />,
       },
       {
         path: 'about',

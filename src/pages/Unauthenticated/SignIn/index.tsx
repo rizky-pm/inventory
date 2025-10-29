@@ -54,7 +54,6 @@ const SignInPage = () => {
           ...response.data.tokens,
         };
 
-        console.log(response.data.user);
         localStorage.setItem('user', JSON.stringify(data));
         navigate('/', { replace: true });
       },

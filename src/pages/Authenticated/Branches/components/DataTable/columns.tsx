@@ -1,5 +1,5 @@
 import { type ColumnDef } from '@tanstack/react-table';
-import type { IBranch } from 'types';
+import type { IBranch } from '@/types';
 import BranchActionsCell from './BranchActionsCell';
 
 export const columns: ColumnDef<IBranch>[] = [

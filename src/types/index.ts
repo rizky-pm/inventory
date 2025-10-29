@@ -1,3 +1,16 @@
+export enum UserRole {
+  Branch = 'branch',
+  Staff = 'staff',
+  Supervisor = 'supervisor',
+  SuperAdmin = 'superadmin',
+}
+
+export interface IMenu {
+  route: string;
+  label: string;
+  roles: UserRole[];
+}
+
 export interface IUserAuth {
   id: string;
   username: string;
@@ -6,6 +19,7 @@ export interface IUserAuth {
   access_token_expired: number;
   refresh_token: string;
   refresh_token_expired: number;
+  role: string;
 }
 
 export interface IProduct {

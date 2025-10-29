@@ -26,7 +26,7 @@ import { useAddNewProduct, useEditProduct } from '@/services/useProduct';
 import { Spinner } from '@/components/ui/spinner';
 import { useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import type { IProduct } from 'types';
+import type { IProduct } from '@/types';
 import _ from 'lodash';
 
 interface Props {

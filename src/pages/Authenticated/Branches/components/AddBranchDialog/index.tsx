@@ -1,7 +1,7 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, type SetStateAction } from 'react';
 import { useForm } from 'react-hook-form';
-import type { IBranch } from 'types';
+import type { IBranch } from '@/types';
 import { addBranchSchema, type AddBranchType } from './schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 
