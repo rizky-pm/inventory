@@ -32,6 +32,39 @@ export interface IProduct {
   updated_at: string;
 }
 
+export interface IRequest {
+  id: string;
+  code: string;
+  items: [
+    {
+      id: string;
+      product_name: string;
+      quantity: number;
+    }
+  ];
+  pickup_schedule: {
+    dataTime: string;
+  };
+  status_histories: [
+    {
+      id: string;
+      status: TStatus;
+      remark: string | null;
+      attachments: [
+        {
+          id: string;
+          file_path: string;
+        }
+      ];
+      action_by: string;
+      created_at: string;
+    }
+  ];
+  created_at: string;
+  updated_at: string;
+  current_status: string;
+}
+
 export interface IBranch {
   id: string;
   name: string;
@@ -39,6 +72,7 @@ export interface IBranch {
   created_at: string;
   updated_at: string;
 }
+export type TStatus = 'pending' | 'approved' | 'rejected' | 'completed';
 
 export interface IBaseResponse {
   status: 'success' | 'error' | 'failed';
