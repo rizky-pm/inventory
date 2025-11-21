@@ -32,12 +32,8 @@ export const useCreateNewRequest = () => {
       formData.append('remarks', body.remarks ?? '');
 
       body.files.forEach((file) => {
-        console.log(file);
-
         formData.append('files', file);
       });
-
-      console.log(formData.get('files'));
 
       const response = await privateApi.post<ICreateNewRequestResponse>(
         '/requests',
