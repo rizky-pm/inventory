@@ -1,7 +1,6 @@
 import { Navigate, Outlet } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import { checkAuth } from '@/utils';
-
 const AuthenticatedWrapper = () => {
   const isAuthenticated = checkAuth();
 

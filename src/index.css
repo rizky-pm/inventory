@@ -130,4 +130,29 @@
   .nav-link-active {
     @apply bg-sidebar-primary text-sidebar-primary-foreground hover:bg-sidebar-primary/90;
   }
+
+  .product-card {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 0px 0px;
+    grid-auto-flow: row;
+    grid-template-areas:
+      'pc-name pc-qty'
+      'pc-sku pc-qty';
+  }
+
+  .pc-name {
+    grid-area: pc-name;
+  }
+
+  .pc-sku {
+    grid-area: pc-sku;
+  }
+
+  .pc-qty {
+    grid-area: pc-qty;
+
+    @apply flex justify-end;
+  }
 }

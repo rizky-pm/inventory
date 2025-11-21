@@ -17,8 +17,6 @@ const Sidebar = () => {
   };
 
   const filteredMenu = useMemo(() => {
-    console.log(user.role);
-
     const data = MENU.filter((item) =>
       item.roles.includes(user?.role as UserRole)
     );

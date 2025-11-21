@@ -1,81 +1,23 @@
 import SectionWrapper from '@/components/SectionWrapper';
-import { DataTable } from './components/DataTable';
-import { columns } from './components/DataTable/columns';
-import SearchProduct from './components/SearchProduct';
-import { Button } from '@/components/ui/button';
-import { Plus } from 'lucide-react';
-import AddProductDialog from './components/AddProductDialog';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { TypographyH3 } from '@/components/ui/typography';
-import type { IUserAuth } from '@/types';
+import { type IUserAuth } from '@/types';
 
 import _ from 'lodash';
-import { useGetProducts } from '@/services/useProduct';
+import ProductTable from '@/components/ProductTable';
+import AddProductDialog from '@/components/ProductTable/AddProductDialog';
 
 const ProductsPage = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [pagination, setPagination] = useState<{
-    pageIndex: number;
-    pageSize: number;
-  }>({
-    pageIndex: 1,
-    pageSize: 10,
-  });
 
   const user: IUserAuth = JSON.parse(localStorage.getItem('user') || 'null');
-
-  const {
-    data: productResonse,
-    isLoading,
-    isSuccess,
-    refetch,
-  } = useGetProducts({
-    page: pagination.pageIndex,
-    size: pagination.pageSize,
-  });
-
-  useEffect(() => {
-    if (pagination.pageIndex > 1) {
-      refetch();
-    }
-  }, [pagination, refetch]);
 
   return (
     <>
       <SectionWrapper>
         <TypographyH3>Hello, {_.startCase(user.full_name)}</TypographyH3>
 
-        {isLoading ? (
-          <p>Loading data...</p>
-        ) : (
-          <div className='container mx-auto py-4 space-y-2'>
-            <div className='flex justify-between items-end'>
-              <SearchProduct />
-
-              <Button
-                aria-label='Add product'
-                onClick={() => {
-                  setIsDialogOpen(true);
-                }}
-              >
-                Add product
-                <Plus />
-              </Button>
-            </div>
-
-            {isSuccess && (
-              <DataTable
-                key={pagination.pageIndex} // optional but helps force update
-                data={productResonse.data}
-                columns={columns}
-                pagination={pagination}
-                setPagination={setPagination}
-                isLoading={isLoading}
-                totalPages={productResonse.meta.total_page} // depends on API shape
-              />
-            )}
-          </div>
-        )}
+        <ProductTable setIsDialogOpen={setIsDialogOpen} />
       </SectionWrapper>
 
       <AddProductDialog

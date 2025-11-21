@@ -1,0 +1,108 @@
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { MoreHorizontal } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { UserRole, type IProduct } from '@/types';
+import AddProductDialog from '../AddProductDialog';
+import { useState } from 'react';
+import { DeleteProductDialog } from '../DeleteDialog';
+import { useRole } from '@/hooks/useRole';
+import { useCartStore } from '@/stores/useCartStore';
+import RequestConfirmationDialog from '../RequestConfirmationDialog';
+
+const ProductActionsCell = (props: { product: IProduct | undefined }) => {
+  const { product } = props;
+  const { hasRole } = useRole();
+  const { addProduct } = useCartStore();
+
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isDialogDeleteOpen, setIsDialogDeleteOpen] = useState(false);
+  const [isDialogConfirmationOpen, setIsDialogConfirmationOpen] =
+    useState(false);
+
+  return (
+    <>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant='ghost' className='h-8 w-8 p-0'>
+            <span className='sr-only'>Open menu</span>
+            <MoreHorizontal />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align='end'>
+          {hasRole([
+            UserRole.Staff,
+            UserRole.SuperAdmin,
+            UserRole.Supervisor,
+          ]) && (
+            <>
+              <DropdownMenuLabel
+                onClick={() => {
+                  setIsDialogOpen(true);
+                }}
+              >
+                Edit
+              </DropdownMenuLabel>
+              <DropdownMenuItem
+                onClick={() => {
+                  setIsDialogDeleteOpen(true);
+                }}
+              >
+                Delete
+              </DropdownMenuItem>
+            </>
+          )}
+
+          {hasRole([UserRole.Branch]) && (
+            <DropdownMenuLabel
+              onClick={() => {
+                if (product) {
+                  if (product.stock === 1) {
+                    setIsDialogConfirmationOpen(true);
+                  }
+                  const productToCart = {
+                    ...product,
+                    qty: 1,
+                  };
+                  addProduct(productToCart);
+                }
+              }}
+            >
+              Add to Request
+            </DropdownMenuLabel>
+          )}
+        </DropdownMenuContent>
+      </DropdownMenu>
+
+      <AddProductDialog
+        isDialogOpen={isDialogOpen}
+        setIsDialogOpen={setIsDialogOpen}
+        product={product}
+      />
+
+      {product ? (
+        <RequestConfirmationDialog
+          isDialogOpen={isDialogConfirmationOpen}
+          setIsDialogOpen={setIsDialogConfirmationOpen}
+          product={product}
+        />
+      ) : null}
+
+      {product ? (
+        <DeleteProductDialog
+          isDialogOpen={isDialogDeleteOpen}
+          setIsDialogOpen={setIsDialogDeleteOpen}
+          productId={product.id}
+          productName={product.name}
+        />
+      ) : null}
+    </>
+  );
+};
+
+export default ProductActionsCell;

@@ -8,7 +8,7 @@ type TypeGetProductsRequest = {
   size: number;
 };
 
-type TypeGetProductsResponse = {
+export type TypeGetProductsResponse = {
   data: IProduct[];
 
   meta: {

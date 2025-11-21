@@ -52,6 +52,7 @@ const SignInPage = () => {
         const data = {
           ...response.data.user,
           ...response.data.tokens,
+          role: 'branch',
         };
 
         localStorage.setItem('user', JSON.stringify(data));

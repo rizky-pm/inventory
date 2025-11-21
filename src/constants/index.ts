@@ -17,6 +17,12 @@ export const MENU: IMenu[] = [
   {
     route: '/products',
     label: 'Products',
+    roles: [UserRole.SuperAdmin, UserRole.Staff, UserRole.Supervisor],
+  },
+
+  {
+    route: '/requests',
+    label: 'Requests',
     roles: [
       UserRole.SuperAdmin,
       UserRole.Staff,
@@ -24,6 +30,7 @@ export const MENU: IMenu[] = [
       UserRole.Branch,
     ],
   },
+
   {
     route: '/accounts',
     label: 'Accounts',
