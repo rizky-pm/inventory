@@ -20,11 +20,13 @@ import { useCreateNewRequest } from '@/services/useRequest';
 import axios from 'axios';
 import { Spinner } from '@/components/ui/spinner';
 import { toast } from 'sonner';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const RequestDetailPage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
 
+  console.log(location);
   const form = useForm<TypeCreateRequestSchema>({
     resolver: zodResolver(createRequestSchema),
     defaultValues: {

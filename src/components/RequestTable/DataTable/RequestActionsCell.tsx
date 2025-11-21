@@ -12,12 +12,14 @@ import { UserRole, type IRequest } from '@/types';
 import { useState } from 'react';
 //   import { DeleteProductDialog } from '../DeleteDialog';
 import { useRole } from '@/hooks/useRole';
+import { useNavigate } from 'react-router-dom';
 //   import { useCartStore } from '@/stores/useCartStore';
 //   import RequestConfirmationDialog from '../RequestConfirmationDialog';
 
 const RequestActionsCell = (props: { request: IRequest | undefined }) => {
   const { request } = props;
   const { hasRole } = useRole();
+  const navigate = useNavigate();
   // const { addProduct } = useCartStore();
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -58,24 +60,19 @@ const RequestActionsCell = (props: { request: IRequest | undefined }) => {
             </>
           )}
 
-          {/* {hasRole([UserRole.Branch]) && (
-              <DropdownMenuLabel
-                onClick={() => {
-                  if (product) {
-                    if (product.stock === 1) {
-                      setIsDialogConfirmationOpen(true);
-                    }
-                    const productToCart = {
-                      ...product,
-                      qty: 1,
-                    };
-                    addProduct(productToCart);
-                  }
-                }}
-              >
-                Add to Request
-              </DropdownMenuLabel>
-            )} */}
+          {hasRole([UserRole.Branch]) && (
+            <DropdownMenuLabel
+              onClick={() => {
+                navigate('/requests/detail', {
+                  state: {
+                    prevUrl: '/',
+                  },
+                });
+              }}
+            >
+              View details
+            </DropdownMenuLabel>
+          )}
         </DropdownMenuContent>
       </DropdownMenu>
 
