@@ -5,7 +5,6 @@ import BranchesPage from '@/pages/Authenticated/Branches';
 import HomePage from '@/pages/Authenticated/Home';
 import ProductsPage from '@/pages/Authenticated/Products';
 import RequestDetailPage from '@/pages/Authenticated/RequestDetail';
-import RequestsPage from '@/pages/Authenticated/Requests';
 import SettingsPage from '@/pages/Authenticated/Settings';
 import SignInPage from '@/pages/Unauthenticated/SignIn';
 import { createBrowserRouter } from 'react-router-dom';
@@ -39,10 +38,6 @@ const router = createBrowserRouter([
       {
         path: 'branches',
         element: <BranchesPage />,
-      },
-      {
-        path: 'requests',
-        element: <RequestsPage />,
       },
       {
         path: 'requests/detail',

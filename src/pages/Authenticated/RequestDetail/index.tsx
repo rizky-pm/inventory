@@ -47,7 +47,8 @@ const RequestDetailPage = () => {
       onSuccess: () => {
         toast.success('Success create request', {
           onAutoClose: () => {
-            navigate('/requests');
+            navigate('/');
+            localStorage.removeItem('cart-storage');
           },
         });
       },

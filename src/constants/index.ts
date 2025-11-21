@@ -17,12 +17,6 @@ export const MENU: IMenu[] = [
   {
     route: '/products',
     label: 'Products',
-    roles: [UserRole.SuperAdmin, UserRole.Staff, UserRole.Supervisor],
-  },
-
-  {
-    route: '/requests',
-    label: 'Requests',
     roles: [
       UserRole.SuperAdmin,
       UserRole.Staff,
