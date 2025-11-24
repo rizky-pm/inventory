@@ -13,6 +13,7 @@ const Sidebar = () => {
 
   const onClickSignOut = () => {
     localStorage.removeItem('user');
+    localStorage.removeItem('cart-storage');
     navigate('/auth/sign-in', { replace: true });
   };
 
