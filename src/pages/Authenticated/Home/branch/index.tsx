@@ -5,7 +5,7 @@ import EmptyData from '@/assets/illustrations/empty-data.svg';
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { useGetRequests } from '@/services/useRequest';
+import { useGetRequests, useGetSummary } from '@/services/useRequest';
 import { useEffect, useState } from 'react';
 import RequestTable from '@/components/RequestTable';
 import { getAuth } from '@/utils';
@@ -32,7 +32,7 @@ const Card = ({
 
 const BranchHomePage = () => {
   const navigate = useNavigate();
-  const { username } = getAuth();
+  const { username, branch } = getAuth();
 
   const [pagination, setPagination] = useState<{
     pageIndex: number;
@@ -52,7 +52,7 @@ const BranchHomePage = () => {
     size: pagination.pageSize,
   });
 
-  console.log(requestsData?.data);
+  const { data: summaryData, isLoading: isLoadingSummary } = useGetSummary();
 
   useEffect(() => {
     if (pagination.pageIndex > 1) {
@@ -63,39 +63,57 @@ const BranchHomePage = () => {
   return (
     <>
       <SectionWrapper className='py-0 px-0'>
-        <TypographyH3>Hi, {username}</TypographyH3>
+        <div className='flex justify-between items-center'>
+          <TypographyH3>Hi, {username}</TypographyH3>
+
+          <span>{branch.name}</span>
+        </div>
         <div
           className={cn(
             'w-[calc(100%+8.333333%)] flex flex-col items-center mt-4',
             requestsData?.data.length ? 'gap-4' : 'gap-32'
           )}
         >
-          <div className='flex w-full justify-between'>
-            <Card className='bg-blue-200'>
-              <span className='font-bold text-xl text-left'>Total Request</span>
-              <span className='font-bold text-7xl text-right'>20</span>
-            </Card>
-            <Card className='bg-yellow-200'>
-              <span className='font-bold text-xl text-left'>
-                Request in Progress
-              </span>
-              <span className='font-bold text-7xl text-right'>10</span>
-            </Card>
+          {!isLoadingSummary ? (
+            <div className='flex w-full justify-between'>
+              <Card className='bg-blue-100'>
+                <span className='font-bold text-xl text-left'>
+                  Total Request
+                </span>
+                <span className='font-bold text-7xl text-right'>
+                  {summaryData?.data.total_approved}
+                </span>
+              </Card>
+              <Card className='bg-yellow-100'>
+                <span className='font-bold text-xl text-left'>
+                  Request in Progress
+                </span>
+                <span className='font-bold text-7xl text-right'>
+                  {summaryData?.data.total_pending}
+                </span>
+              </Card>
 
-            <Card className='bg-red-200'>
-              <span className='font-bold text-xl text-left'>
-                Request Rejected
-              </span>
-              <span className='font-bold text-7xl text-right'>5</span>
-            </Card>
+              <Card className='bg-red-100'>
+                <span className='font-bold text-xl text-left'>
+                  Request Rejected
+                </span>
+                <span className='font-bold text-7xl text-right'>
+                  {summaryData?.data.total_rejected}
+                </span>
+              </Card>
 
-            <Card className='bg-green-200'>
-              <span className='font-bold text-xl text-left'>
-                Request Completed
-              </span>
-              <span className='font-bold text-7xl text-right'>5</span>
-            </Card>
-          </div>
+              <Card className='bg-green-100'>
+                <span className='font-bold text-xl text-left'>
+                  Request Completed
+                </span>
+                <span className='font-bold text-7xl text-right'>
+                  {summaryData?.data.total_completed}
+                </span>
+              </Card>
+            </div>
+          ) : (
+            <p>Loading summary ...</p>
+          )}
           {requestsData?.data.length ? (
             isSuccess && (
               <RequestTable

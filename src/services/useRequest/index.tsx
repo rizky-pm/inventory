@@ -1,6 +1,10 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { privateApi } from '..';
-import type { IBaseResponse, IRequest } from '@/types';
+import type { IBaseResponse, IRequest, ISummary } from '@/types';
+
+export interface IGetSummaryResponse extends IBaseResponse {
+  data: ISummary;
+}
 
 interface IGetRequestsRequest {
   page: number;
@@ -28,6 +32,19 @@ interface ICreateNewRequestResponse extends IBaseResponse {
     id: string;
   };
 }
+
+export const useGetSummary = () => {
+  return useQuery({
+    queryKey: ['request.get-summary'],
+    queryFn: async () => {
+      const response = await privateApi.get<IGetSummaryResponse>(
+        '/requests/summary'
+      );
+
+      return response.data;
+    },
+  });
+};
 
 export const useGetRequests = (params: IGetRequestsRequest) => {
   return useQuery({

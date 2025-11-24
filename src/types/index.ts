@@ -11,6 +11,11 @@ export interface IMenu {
   roles: UserRole[];
 }
 
+export interface IBranch {
+  id: string;
+  name: string;
+}
+
 export interface IUserAuth {
   id: string;
   username: string;
@@ -20,6 +25,7 @@ export interface IUserAuth {
   refresh_token: string;
   refresh_token_expired: number;
   role: string;
+  branch: IBranch;
 }
 
 export interface IProduct {
@@ -73,6 +79,13 @@ export interface IBranch {
   updated_at: string;
 }
 export type TStatus = 'pending' | 'approved' | 'rejected' | 'completed';
+
+export interface ISummary {
+  total_pending: number;
+  total_approved: number;
+  total_rejected: number;
+  total_completed: number;
+}
 
 export interface IBaseResponse {
   status: 'success' | 'error' | 'failed';
