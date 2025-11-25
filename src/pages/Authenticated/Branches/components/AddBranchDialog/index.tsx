@@ -147,7 +147,7 @@ const AddBranchDialog = (props: Props) => {
                   <FormLabel>Address</FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder={'Product Description'}
+                      placeholder={'Branch address'}
                       autoComplete='off'
                       disabled={isPendingEditBranch || isPendingEditBranch}
                       {...field}

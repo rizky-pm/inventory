@@ -43,8 +43,6 @@ const BranchesPage = () => {
         ) : (
           <div className='container mx-auto py-4 space-y-2'>
             <div className='flex justify-between items-end'>
-              {/* <SearchProduct /> */}
-
               <Button
                 aria-label='Add branch'
                 onClick={() => {
@@ -58,13 +56,13 @@ const BranchesPage = () => {
 
             {isSuccess && (
               <DataTable
-                key={pagination.pageIndex} // optional but helps force update
+                key={pagination.pageIndex}
                 data={branchResponse.data}
                 columns={columns}
                 pagination={pagination}
                 setPagination={setPagination}
                 isLoading={isLoading}
-                totalPages={1} // depends on API shape
+                totalPages={1}
               />
             )}
           </div>

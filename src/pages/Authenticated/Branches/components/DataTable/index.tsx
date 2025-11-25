@@ -69,9 +69,6 @@ export function DataTable<TData, TValue>({
     return <div>Loading data ...</div>;
   }
 
-  console.log(pagination.pageIndex);
-  console.log(totalPages);
-
   return (
     <div className='overflow-hidden rounded-md border'>
       <Table>
