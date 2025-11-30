@@ -5,31 +5,46 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { MoreHorizontal } from 'lucide-react';
+import { MoreHorizontal, SquareArrowOutUpRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { UserRole, type IRequest } from '@/types';
-//   import AddProductDialog from '../AddProductDialog';
 import { useState } from 'react';
-//   import { DeleteProductDialog } from '../DeleteDialog';
 import { useRole } from '@/hooks/useRole';
 import { useNavigate } from 'react-router-dom';
-//   import { useCartStore } from '@/stores/useCartStore';
-//   import RequestConfirmationDialog from '../RequestConfirmationDialog';
+import { ConfirmationDialog } from '@/components/Dialog';
 
 const RequestActionsCell = (props: { request: IRequest | undefined }) => {
   const { request } = props;
   const { hasRole } = useRole();
   const navigate = useNavigate();
-  // const { addProduct } = useCartStore();
 
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [isDialogDeleteOpen, setIsDialogDeleteOpen] = useState(false);
-  const [isDialogConfirmationOpen, setIsDialogConfirmationOpen] =
-    useState(false);
+  // const [isDialogRejectConfirmationOpen, setIsDialogRejectConfirmationOpen] =
+  //   useState(false);
+  // const [isDialogApproveConfirmationOpen, setIsDialogApproveConfirmationOpen] =
+  //   useState(false);
+
+  // const onClickApproveRequest = () => {
+  //   console.log('Approve');
+  // };
+
+  // const onClickRejectRequest = () => {
+  //   console.log('Reject');
+  // };
+
+  const onClickViewDetail = () => {
+    navigate(`/requests/detail?request-code=${request?.code}`, {
+      state: {
+        request,
+      },
+    });
+  };
 
   return (
-    <>
-      <DropdownMenu>
+    <div className='flex justify-end'>
+      <Button size={'icon'} variant={'ghost'} onClick={onClickViewDetail}>
+        <SquareArrowOutUpRight />
+      </Button>
+      {/* <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant='ghost' className='h-8 w-8 p-0'>
             <span className='sr-only'>Open menu</span>
@@ -38,67 +53,42 @@ const RequestActionsCell = (props: { request: IRequest | undefined }) => {
         </DropdownMenuTrigger>
         <DropdownMenuContent align='end'>
           {hasRole([
+            UserRole.Branch,
             UserRole.Staff,
             UserRole.SuperAdmin,
             UserRole.Supervisor,
           ]) && (
-            <>
-              <DropdownMenuLabel
-                onClick={() => {
-                  setIsDialogOpen(true);
-                }}
-              >
-                Edit
-              </DropdownMenuLabel>
-              <DropdownMenuItem
-                onClick={() => {
-                  setIsDialogDeleteOpen(true);
-                }}
-              >
-                Delete
-              </DropdownMenuItem>
-            </>
-          )}
-
-          {hasRole([UserRole.Branch]) && (
             <DropdownMenuLabel
               onClick={() => {
-                navigate('/requests/detail', {
-                  state: {
-                    prevUrl: '/',
-                  },
-                });
+                navigate(`/requests/detail?request-code=${request?.code}`);
               }}
             >
               View details
             </DropdownMenuLabel>
           )}
         </DropdownMenuContent>
-      </DropdownMenu>
+      </DropdownMenu> */}
 
-      {/* <AddProductDialog
-          isDialogOpen={isDialogOpen}
-          setIsDialogOpen={setIsDialogOpen}
-          product={product}
-        />
-  
-        {product ? (
-          <RequestConfirmationDialog
-            isDialogOpen={isDialogConfirmationOpen}
-            setIsDialogOpen={setIsDialogConfirmationOpen}
-            product={product}
-          />
-        ) : null}
-  
-        {product ? (
-          <DeleteProductDialog
-            isDialogOpen={isDialogDeleteOpen}
-            setIsDialogOpen={setIsDialogDeleteOpen}
-            productId={product.id}
-            productName={product.name}
-          />
-        ) : null} */}
-    </>
+      {/* <ConfirmationDialog
+        isOpen={isDialogApproveConfirmationOpen}
+        setIsOpen={setIsDialogApproveConfirmationOpen}
+        title='Approve'
+        description='Are you sure want to approve the request?'
+        negativeLabel='Cancel'
+        positiveLabel='Approve'
+        onPositive={onClickApproveRequest}
+      />
+
+      <ConfirmationDialog
+        isOpen={isDialogRejectConfirmationOpen}
+        setIsOpen={setIsDialogRejectConfirmationOpen}
+        title='Reject'
+        description='Are you sure want to reject the request?'
+        negativeLabel='Cancel'
+        positiveLabel='Reject'
+        onPositive={onClickRejectRequest}
+      /> */}
+    </div>
   );
 };
 

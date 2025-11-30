@@ -72,7 +72,9 @@ const ProductTable = (props: Props) => {
           <Button
             aria-label='Add product'
             onClick={() => {
-              navigate('/requests/detail');
+              if (total() !== 0) {
+                navigate('/requests/detail');
+              }
             }}
           >
             {total() === 0 ? `${total()} item` : `View ${total()} item(s)`}

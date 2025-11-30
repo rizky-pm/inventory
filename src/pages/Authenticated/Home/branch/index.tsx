@@ -66,7 +66,7 @@ const BranchHomePage = () => {
         <div className='flex justify-between items-center'>
           <TypographyH3>Hi, {username}</TypographyH3>
 
-          <span>{branch.name}</span>
+          {branch && <span>{branch.name}</span>}
         </div>
         <div
           className={cn(

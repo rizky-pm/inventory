@@ -23,3 +23,23 @@ export const getAuth = () => {
 
   return user;
 };
+
+export const getDateTime = () => {
+  const now = dayjs();
+
+  const defaultTime = now.format('HH:mm');
+
+  const monthStart = now.startOf('month');
+  const firstFiveDaysEnd = monthStart.add(4, 'day');
+
+  const today = now;
+  const yesterday = now.subtract(1, 'day');
+
+  return {
+    defaultTime,
+    monthStart,
+    firstFiveDaysEnd,
+    today,
+    yesterday,
+  };
+};

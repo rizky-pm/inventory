@@ -1,19 +1,9 @@
-import { useRole } from '@/hooks/useRole';
-import { UserRole } from '@/types';
-import { Package, Plus } from 'lucide-react';
 import React, { type SetStateAction } from 'react';
-import { Button } from '../ui/button';
-import { useNavigate } from 'react-router-dom';
-import { useCartStore } from '@/stores/useCartStore';
-// import { DataTable } from './DataTable';
-// import SearchProduct from './SearchProduct';
-// import { columns } from './DataTable/columns';
 import { RequestDataTable } from './DataTable';
 import { columns } from './DataTable/columns';
 import { type IGetRequestsResponse } from '@/services/useRequest';
 
 interface Props {
-  setIsDialogOpen?: React.Dispatch<SetStateAction<boolean>>;
   pagination: {
     pageIndex: number;
     pageSize: number;
@@ -27,18 +17,8 @@ interface Props {
 }
 
 const RequestTable = (props: Props) => {
-  const {
-    setIsDialogOpen,
-    pagination,
-    setPagination,
-    requestData,
-    isLoading,
-    isSuccess,
-  } = props;
-
-  const { hasRole } = useRole();
-  const { total } = useCartStore();
-  const navigate = useNavigate();
+  const { pagination, setPagination, requestData, isLoading, isSuccess } =
+    props;
 
   return (
     <div className='container mx-auto py-4 space-y-2'>

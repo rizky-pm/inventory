@@ -33,6 +33,12 @@ interface ICreateNewRequestResponse extends IBaseResponse {
   };
 }
 
+interface IHandleRequestResponse extends IBaseResponse {
+  data: {
+    id: string;
+  };
+}
+
 export const useGetSummary = () => {
   return useQuery({
     queryKey: ['request.get-summary'],
@@ -86,6 +92,69 @@ export const useCreateNewRequest = () => {
       );
 
       return response;
+    },
+  });
+};
+
+export const useRejectRequest = () => {
+  return useMutation({
+    mutationKey: ['request.reject'],
+    mutationFn: async (body: { id: string; remarks?: string }) => {
+      const response = await privateApi.patch<IHandleRequestResponse>(
+        `/requests/${body.id}/reject`,
+        {
+          remark: body.remarks,
+        }
+      );
+
+      return response.data;
+    },
+  });
+};
+
+export const useApproveRequest = () => {
+  return useMutation({
+    mutationKey: ['request.approve'],
+    mutationFn: async (body: {
+      id: string;
+      pickup_schedule: string;
+      remarks?: string;
+    }) => {
+      const response = await privateApi.patch<IHandleRequestResponse>(
+        `/requests/${body.id}/approve`,
+        {
+          pickup_schedule: body.pickup_schedule,
+          remark: body.remarks,
+        }
+      );
+
+      return response.data;
+    },
+  });
+};
+
+export const useCompleteRequest = () => {
+  return useMutation({
+    mutationKey: ['request.complete'],
+    mutationFn: async (body: {
+      id: string;
+      files: File[];
+      remarks?: string;
+    }) => {
+      const formData = new FormData();
+
+      formData.append('remarks', body.remarks ?? '');
+
+      body.files.forEach((file) => {
+        formData.append('files', file);
+      });
+
+      const response = await privateApi.patch<IHandleRequestResponse>(
+        `/requests/${body.id}/complete`,
+        formData
+      );
+
+      return response.data;
     },
   });
 };

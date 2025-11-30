@@ -1,5 +1,4 @@
 import SectionWrapper from '@/components/SectionWrapper';
-import React from 'react';
 
 const AdminHomePage = () => {
   return (

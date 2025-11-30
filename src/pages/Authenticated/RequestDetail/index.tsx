@@ -1,55 +1,100 @@
-import SectionWrapper from '@/components/SectionWrapper';
-import { useCartStore } from '@/stores/useCartStore';
-import ProductCard from './components/ProductCard';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
-import { createRequestSchema, type TypeCreateRequestSchema } from './schema';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { useState } from 'react';
 import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
-import { Button } from '@/components/ui/button';
-import { useCreateNewRequest } from '@/services/useRequest';
-import axios from 'axios';
-import { Spinner } from '@/components/ui/spinner';
+  useSearchParams,
+  Navigate,
+  useLocation,
+  useNavigate,
+} from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import dayjs from 'dayjs';
+import { useCartStore } from '@/stores/useCartStore';
+import { createRequestSchema, type TypeCreateRequestSchema } from './schema';
+import {
+  useApproveRequest,
+  useCompleteRequest,
+  useCreateNewRequest,
+  useRejectRequest,
+} from '@/services/useRequest';
+import CreateRequestUI from './components/CreateRequestUI';
+import SupervisorRequestUI from './components/SupervisorRequestUI';
 import { toast } from 'sonner';
-import { useLocation, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import SectionWrapper from '@/components/SectionWrapper';
+import { TypographyH3 } from '@/components/ui/typography';
+import { useRole } from '@/hooks/useRole';
+import { UserRole } from '@/types';
+import _ from 'lodash';
+import { Badge } from '@/components/ui/badge';
+import {
+  completeRequestSchema,
+  type TypeCompleteRequestSchema,
+} from './components/SupervisorRequestUI/schema';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 const RequestDetailPage = () => {
-  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const requestCode = searchParams.get('request-code');
   const location = useLocation();
+  const navigate = useNavigate();
+  const { hasRole } = useRole();
 
-  console.log(location);
-  const form = useForm<TypeCreateRequestSchema>({
+  const isBranchRole = hasRole([UserRole.Branch]);
+  const isNonBranchRole = hasRole([
+    UserRole.SuperAdmin,
+    UserRole.Supervisor,
+    UserRole.Staff,
+  ]);
+
+  const { products, total, clearCart } = useCartStore();
+
+  const createRequestForm = useForm<TypeCreateRequestSchema>({
     resolver: zodResolver(createRequestSchema),
     defaultValues: {
       files: undefined,
-      items: undefined,
       remarks: '',
     },
   });
 
-  const { products, total } = useCartStore();
-  const { mutateAsync, isPending } = useCreateNewRequest();
+  const completeRequestForm = useForm<TypeCompleteRequestSchema>({
+    resolver: zodResolver(completeRequestSchema),
+    defaultValues: {
+      files: undefined,
+      remarks: '',
+    },
+  });
 
-  const onCreateRequest = (values: TypeCreateRequestSchema) => {
-    const payload = {
-      ...values,
-      files: [values.files],
-    };
+  const { mutateAsync: createRequest, isPending: isCreating } =
+    useCreateNewRequest();
+  const { mutateAsync: approveRequest, isPending: isApproving } =
+    useApproveRequest();
+  const { mutateAsync: rejectRequest, isPending: isRejecting } =
+    useRejectRequest();
+  const { mutateAsync: completeRequest, isPending: isCompleting } =
+    useCompleteRequest();
 
-    mutateAsync(payload, {
+  const [remarks, setRemarks] = useState<string | undefined>();
+  const [date, setDate] = useState<Date | undefined>();
+  const [time, setTime] = useState<string | undefined>();
+  const [open, setOpen] = useState<boolean>(false);
+
+  const requestDetail = location.state?.request;
+
+  if (isNonBranchRole && !location.state) {
+    return <Navigate to='/' replace />;
+  }
+
+  const handleCreateRequest = (values: TypeCreateRequestSchema) => {
+    console.log('click');
+
+    console.log(values);
+
+    const payload = { ...values, files: [values.files], items: products };
+    createRequest(payload, {
       onSuccess: () => {
         toast.success('Success create request', {
           onAutoClose: () => {
             navigate('/');
+            clearCart();
             localStorage.removeItem('cart-storage');
           },
         });
@@ -57,14 +102,14 @@ const RequestDetailPage = () => {
       onError: (error) => {
         if (axios.isAxiosError(error)) {
           console.log(error.response?.data.message);
-
           toast.error(
             <div>
+              {' '}
               {error.response?.data.message.map(
                 (item: Record<string, string>) => (
                   <div key={item.product_id}>{item.details}</div>
                 )
-              )}
+              )}{' '}
             </div>
           );
         }
@@ -72,97 +117,153 @@ const RequestDetailPage = () => {
     });
   };
 
-  useEffect(() => {
-    if (products.length) {
-      form.setValue('items', products);
+  const handleApprove = () => {
+    if (!time || !requestDetail.id) {
+      return;
     }
-  }, [products, form]);
+    const merged = dayjs(date)
+      .hour(Number(time.split(':')[0]))
+      .minute(Number(time.split(':')[1]))
+      .second(0)
+      .millisecond(0);
+    const pickup_schedule = merged.toDate().toISOString();
+    const payload = { remarks, id: requestDetail.id, pickup_schedule };
+    approveRequest(payload, {
+      onSuccess: () => {
+        toast.success('Request has been approved', {
+          onAutoClose: () => {
+            navigate('/');
+          },
+        });
+      },
+      onError: (error) => {
+        if (axios.isAxiosError(error)) {
+          console.log(error.response?.data.message);
+          toast.error('Failed approving request');
+        }
+      },
+    });
+  };
+
+  const handleReject = () => {
+    rejectRequest(
+      { remarks, id: requestDetail.id! },
+      {
+        onSuccess: () => {
+          toast.success('Request has been rejected', {
+            onAutoClose: () => {
+              navigate('/');
+            },
+          });
+        },
+        onError: (error) => {
+          if (axios.isAxiosError(error)) {
+            console.log(error.response?.data.message);
+            toast.error('Failed rejecting request');
+          }
+        },
+      }
+    );
+  };
+
+  const handleComplete = (values: TypeCompleteRequestSchema) => {
+    const payload = {
+      ...values,
+      files: [values.files],
+      id: requestDetail.id,
+    };
+
+    completeRequest(payload, {
+      onSuccess: () => {
+        toast.success('Request has been completed', {
+          onAutoClose: () => {
+            navigate('/');
+          },
+        });
+      },
+      onError: (error) => {
+        if (axios.isAxiosError(error)) {
+          console.log(error.response?.data.message);
+          toast.error('Failed completing request');
+        }
+      },
+    });
+  };
 
   return (
-    <SectionWrapper>
-      <h1>Request Detail</h1>
-      {products.length ? (
-        <div className='w-full flex flex-col justify-center items-center'>
-          <div className='w-1/2 flex flex-col gap-4'>
-            <div className='flex flex-col'>
-              {products.map((product) => (
-                <ProductCard product={product} key={product.id} />
-              ))}
-              <div className='py-4 flex justify-between'>
-                <p className='font-semibold'>Total</p>
-                <span>
-                  {total()} {total() > 1 ? 'Items' : 'Item'}
-                </span>
-              </div>
-            </div>
+    <SectionWrapper className='px-32'>
+      <div className='flex justify-between items-center'>
+        <div>
+          <TypographyH3>Request {_.capitalize(requestCode!)}</TypographyH3>
+          {requestDetail ? (
+            <span>Created by {requestDetail.created_by}</span>
+          ) : null}
+        </div>
+        {requestDetail ? (
+          <Badge className='capitalize' variant={requestDetail.current_status}>
+            {requestDetail.current_status}
+          </Badge>
+        ) : null}
+      </div>
 
-            <Form {...form}>
-              <form
-                onSubmit={form.handleSubmit(onCreateRequest)}
-                className='space-y-4'
-              >
-                <FormField
-                  control={form.control}
-                  name='files'
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>
-                        Document <span className='text-red-600'>*</span>
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          type='file'
-                          onChange={(e) => {
-                            const selectedFile = e.target.files;
+      <div className='w-full flex flex-col justify-center items-center mt-4'>
+        <div className='w-full flex flex-col gap-4'>
+          <div>
+            {/* CREATE MODE (Branch User) */}
+            {isBranchRole && !requestCode && (
+              <CreateRequestUI
+                form={createRequestForm}
+                products={products}
+                total={total}
+                isPending={isCreating}
+                onCreateRequest={handleCreateRequest}
+              />
+            )}
 
-                            if (!selectedFile) return;
-                            console.log(selectedFile[0]);
-                            const file = selectedFile[0];
+            {/* BRANCH – VIEW EXISTING REQUEST */}
+            {isBranchRole && requestCode && location?.state?.request && (
+              <SupervisorRequestUI
+                request={requestDetail}
+                date={date}
+                time={time}
+                remarks={remarks}
+                setDate={setDate}
+                setTime={setTime}
+                setRemarks={setRemarks}
+                open={open}
+                setOpen={setOpen}
+                isApproving={isApproving}
+                isRejecting={isRejecting}
+              />
+            )}
 
-                            field.onChange(file);
-                          }}
-                          accept='.pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name='remarks'
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Remarks</FormLabel>
-                      <FormControl>
-                        <Textarea
-                          id='remarks'
-                          placeholder='Remarks...'
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <Button type='submit' disabled={isPending}>
-                  {isPending ? (
-                    <>
-                      <Spinner /> Creating request
-                    </>
-                  ) : (
-                    'Create Request'
-                  )}
-                </Button>
-              </form>
-            </Form>
+            {/* VIEW MODE (Supervisor / Staff) */}
+            {isNonBranchRole && (
+              <SupervisorRequestUI
+                request={requestDetail}
+                form={completeRequestForm}
+                // dialog state
+                // approve state
+                date={date}
+                time={time}
+                remarks={remarks}
+                setDate={setDate}
+                setTime={setTime}
+                setRemarks={setRemarks}
+                open={open}
+                setOpen={setOpen}
+                // actions
+                onApprove={handleApprove}
+                onReject={handleReject}
+                onComplete={handleComplete}
+                isApproving={isApproving}
+                isRejecting={isRejecting}
+                isCompleting={isCompleting}
+              />
+            )}
           </div>
         </div>
-      ) : (
-        <p>You have no request yet.</p>
-      )}
+      </div>
     </SectionWrapper>
   );
 };

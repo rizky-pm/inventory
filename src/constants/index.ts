@@ -36,3 +36,5 @@ export const MENU: IMenu[] = [
     roles: [UserRole.SuperAdmin, UserRole.Supervisor],
   },
 ];
+
+export const DATE_FORMAT = 'dddd, DD MMMM YYYY';

@@ -25,7 +25,7 @@ export interface IUserAuth {
   refresh_token: string;
   refresh_token_expired: number;
   role: string;
-  branch: IBranch;
+  branch?: IBranch;
 }
 
 export interface IProduct {
@@ -41,31 +41,24 @@ export interface IProduct {
 export interface IRequest {
   id: string;
   code: string;
-  items: [
-    {
+  items: {
+    id: string;
+    product_name: string;
+    quantity: number;
+  }[];
+  pickup_schedule: string;
+  created_by: string;
+  status_histories: {
+    id: string;
+    status: TStatus;
+    remark: string | null;
+    attachments: {
       id: string;
-      product_name: string;
-      quantity: number;
-    }
-  ];
-  pickup_schedule: {
-    dataTime: string;
-  };
-  status_histories: [
-    {
-      id: string;
-      status: TStatus;
-      remark: string | null;
-      attachments: [
-        {
-          id: string;
-          file_path: string;
-        }
-      ];
-      action_by: string;
-      created_at: string;
-    }
-  ];
+      url_file: string;
+    }[];
+    action_by: string;
+    created_at: string;
+  }[];
   created_at: string;
   updated_at: string;
   current_status: string;
