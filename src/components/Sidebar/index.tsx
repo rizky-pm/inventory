@@ -26,7 +26,7 @@ const Sidebar = () => {
   }, [user]);
 
   return (
-    <nav className='w-[300px] h-screen p-4 border-r bg-sidebar text-sidebar-foreground flex flex-col gap-2'>
+    <nav className='w-[250px] h-screen fixed p-4 border-r bg-sidebar text-sidebar-foreground flex flex-col gap-2'>
       <span className='font-bold text-4xl tracking-tighter'>inventory</span>
       <Separator />
 

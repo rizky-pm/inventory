@@ -1,14 +1,18 @@
 import { Navigate, Outlet } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import { checkAuth } from '@/utils';
+
 const AuthenticatedWrapper = () => {
   const isAuthenticated = checkAuth();
 
   return isAuthenticated ? (
-    <main className='flex'>
+    <div className='flex'>
       <Sidebar />
-      <Outlet />
-    </main>
+
+      <main className='flex justify-center ml-[250px] w-full'>
+        <Outlet />
+      </main>
+    </div>
   ) : (
     <Navigate to='/auth/sign-in' replace />
   );
