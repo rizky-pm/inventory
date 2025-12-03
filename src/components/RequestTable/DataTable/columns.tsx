@@ -1,8 +1,8 @@
 import type { ColumnDef } from '@tanstack/react-table';
 import RequestActionsCell from './RequestActionsCell';
 import type { IRequest } from '@/types';
-import _ from 'lodash';
 import dayjs from 'dayjs';
+import { Badge } from '@/components/ui/badge';
 
 export const columns: ColumnDef<IRequest>[] = [
   {
@@ -22,7 +22,37 @@ export const columns: ColumnDef<IRequest>[] = [
     accessorKey: 'current_status',
     header: 'Status',
     size: 1,
-    cell: ({ row }) => <p>{_.capitalize(row.original.current_status)}</p>,
+    cell: ({ row }) => {
+      const value = row.original.current_status;
+
+      if (value === 'pending') {
+        return (
+          <Badge variant={value} className='capitalize'>
+            {value}
+          </Badge>
+        );
+      } else if (value === 'approved') {
+        return (
+          <Badge variant={value} className='capitalize'>
+            {value}
+          </Badge>
+        );
+      } else if (value === 'rejected') {
+        return (
+          <Badge variant={value} className='capitalize'>
+            {value}
+          </Badge>
+        );
+      } else if (value === 'completed') {
+        return (
+          <Badge variant={value} className='capitalize'>
+            {value}
+          </Badge>
+        );
+      }
+
+      return <Badge>{row.original.current_status}</Badge>;
+    },
   },
   {
     accessorKey: 'created_at',
