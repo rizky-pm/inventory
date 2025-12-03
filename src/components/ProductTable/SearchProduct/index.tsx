@@ -1,26 +1,22 @@
-import { useForm } from 'react-hook-form';
+import { type UseFormReturn } from 'react-hook-form';
 
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 
-import {
-  searchProductSchema,
-  type SearchProductType,
-} from './search-product.schema';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Search } from 'lucide-react';
+import { type SearchProductType } from './search-product.schema';
+import { Search, X } from 'lucide-react';
 
-const SearchProduct = () => {
-  const form = useForm<SearchProductType>({
-    resolver: zodResolver(searchProductSchema),
-    defaultValues: {
-      productName: '',
-    },
-  });
+interface IProps {
+  form: UseFormReturn<SearchProductType>;
+  refetch: () => void;
+}
 
-  const onSearch = (values: SearchProductType) => {
-    console.log(values);
+const SearchProduct = (props: IProps) => {
+  const { refetch, form } = props;
+
+  const onSearch = () => {
+    refetch();
   };
 
   return (
@@ -55,6 +51,17 @@ const SearchProduct = () => {
             aria-label='Search'
           >
             <Search />
+          </Button>
+          <Button
+            variant='outline'
+            size='icon'
+            aria-label='Clear search'
+            onClick={() => {
+              form.reset();
+              form.clearErrors('productName');
+            }}
+          >
+            <X />
           </Button>
         </form>
       </Form>

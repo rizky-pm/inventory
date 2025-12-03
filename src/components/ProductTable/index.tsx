@@ -9,6 +9,12 @@ import { DataTable } from './DataTable';
 import SearchProduct from './SearchProduct';
 import { columns } from './DataTable/columns';
 import { useGetProducts } from '@/services/useProduct';
+import { useForm } from 'react-hook-form';
+import {
+  searchProductSchema,
+  type SearchProductType,
+} from './SearchProduct/search-product.schema';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 interface Props {
   setIsDialogOpen?: React.Dispatch<SetStateAction<boolean>>;
@@ -29,6 +35,13 @@ const ProductTable = (props: Props) => {
   const { total } = useCartStore();
   const navigate = useNavigate();
 
+  const form = useForm<SearchProductType>({
+    resolver: zodResolver(searchProductSchema),
+    defaultValues: {
+      productName: '',
+    },
+  });
+
   const {
     data: productResponse,
     isLoading,
@@ -37,6 +50,7 @@ const ProductTable = (props: Props) => {
   } = useGetProducts({
     page: pagination.pageIndex,
     size: pagination.pageSize,
+    search: form.getValues('productName'),
   });
 
   useEffect(() => {
@@ -48,7 +62,7 @@ const ProductTable = (props: Props) => {
   return (
     <div className='container mx-auto py-4 space-y-2'>
       <div className='flex justify-between items-end'>
-        <SearchProduct />
+        <SearchProduct form={form} refetch={refetch} />
 
         {hasRole([
           UserRole.SuperAdmin,

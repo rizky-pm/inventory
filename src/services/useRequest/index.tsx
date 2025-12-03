@@ -9,6 +9,7 @@ export interface IGetSummaryResponse extends IBaseResponse {
 interface IGetRequestsRequest {
   page: number;
   size: number;
+  search?: string;
 }
 
 export interface IGetRequestsResponse extends IBaseResponse {
@@ -54,11 +55,15 @@ export const useGetSummary = () => {
 
 export const useGetRequests = (params: IGetRequestsRequest) => {
   return useQuery({
-    queryKey: ['request.get-requests', params.page, params.size],
+    queryKey: ['request.get-requests', params.page, params.size, params.search],
     queryFn: async () => {
-      const response = await privateApi.get<IGetRequestsResponse>(
-        `/requests?page=${params.page}&size=${10}`
-      );
+      const response = await privateApi.get<IGetRequestsResponse>(`/requests`, {
+        params: {
+          page: params.page,
+          size: params.size,
+          search: params.search || undefined,
+        },
+      });
 
       return response.data;
     },

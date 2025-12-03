@@ -9,6 +9,13 @@ import RequestTable from '@/components/RequestTable';
 import { Button } from '@/components/ui/button';
 import EmptyData from '@/assets/illustrations/empty-data.svg';
 import { Plus } from 'lucide-react';
+import { useForm } from 'react-hook-form';
+import {
+  searchRequestSchema,
+  type SearchRequestType,
+} from '@/components/RequestTable/SearchRequest/schema';
+import { zodResolver } from '@hookform/resolvers/zod';
+import SearchRequest from '@/components/RequestTable/SearchRequest';
 
 const Card = ({
   children,
@@ -32,7 +39,6 @@ const Card = ({
 const HomePage = () => {
   const navigate = useNavigate();
   const { username, branch } = getAuth();
-  console.log(branch);
 
   const [pagination, setPagination] = useState<{
     pageIndex: number;
@@ -40,6 +46,13 @@ const HomePage = () => {
   }>({
     pageIndex: 1,
     pageSize: 10,
+  });
+
+  const form = useForm<SearchRequestType>({
+    resolver: zodResolver(searchRequestSchema),
+    defaultValues: {
+      requestCode: '',
+    },
   });
 
   const {
@@ -50,6 +63,7 @@ const HomePage = () => {
   } = useGetRequests({
     page: pagination.pageIndex,
     size: pagination.pageSize,
+    search: form.getValues('requestCode'),
   });
 
   const { data: summaryData, isLoading: isLoadingSummary } = useGetSummary();
@@ -114,15 +128,19 @@ const HomePage = () => {
         {requestsData?.data.length ? (
           isSuccess && (
             <div className='w-full flex flex-col'>
-              <Button
-                className='ml-auto'
-                onClick={() => {
-                  navigate('/products');
-                }}
-              >
-                <Plus />
-                Create new request
-              </Button>
+              <div className='flex justify-between items-center'>
+                <SearchRequest form={form} refetch={refetch} />
+
+                <Button
+                  className='ml-auto'
+                  onClick={() => {
+                    navigate('/products');
+                  }}
+                >
+                  <Plus />
+                  Create new request
+                </Button>
+              </div>
               <RequestTable
                 pagination={pagination}
                 setPagination={setPagination}

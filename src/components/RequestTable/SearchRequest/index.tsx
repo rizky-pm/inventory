@@ -1,16 +1,16 @@
-import { type SearchBranchType } from './schema';
-import { type UseFormReturn } from 'react-hook-form';
+import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
 import { Search, X } from 'lucide-react';
+import type { UseFormReturn } from 'react-hook-form';
+import type { SearchRequestType } from './schema';
 
 interface IProps {
-  form: UseFormReturn<SearchBranchType>;
+  form: UseFormReturn<SearchRequestType>;
   refetch: () => void;
 }
 
-const SearchBranch = (props: IProps) => {
+const SearchRequest = (props: IProps) => {
   const { form, refetch } = props;
 
   const onSearch = () => {
@@ -26,13 +26,13 @@ const SearchBranch = (props: IProps) => {
         >
           <FormField
             control={form.control}
-            name='branchName'
+            name='requestCode'
             render={({ field }) => (
               <FormItem className='w-60'>
                 <FormControl>
                   <Input
                     placeholder={
-                      form.formState.errors.branchName?.message ||
+                      form.formState.errors.requestCode?.message ||
                       'Product name'
                     }
                     {...field}
@@ -56,7 +56,7 @@ const SearchBranch = (props: IProps) => {
             aria-label='Clear search'
             onClick={() => {
               form.reset();
-              form.clearErrors('branchName');
+              form.clearErrors('requestCode');
             }}
           >
             <X />
@@ -67,4 +67,4 @@ const SearchBranch = (props: IProps) => {
   );
 };
 
-export default SearchBranch;
+export default SearchRequest;

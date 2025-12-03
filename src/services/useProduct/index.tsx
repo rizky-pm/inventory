@@ -6,6 +6,7 @@ import _ from 'lodash';
 type TypeGetProductsRequest = {
   page: number;
   size: number;
+  search?: string;
 };
 
 export type TypeGetProductsResponse = {
@@ -47,10 +48,17 @@ interface IDeleteProductResponse extends IBaseResponse {
 
 export const useGetProducts = (params: TypeGetProductsRequest) => {
   return useQuery({
-    queryKey: ['product.get-products', params.page, params.size],
+    queryKey: ['product.get-products', params.page, params.size, params.search],
     queryFn: async () => {
       const response = await privateApi.get<TypeGetProductsResponse>(
-        `/products?page=${params.page}&size=${10}`
+        `/products`,
+        {
+          params: {
+            page: params.page,
+            size: params.size,
+            search: params.search || undefined,
+          },
+        }
       );
 
       return response.data;
