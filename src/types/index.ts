@@ -74,6 +74,7 @@ export interface IBranch {
 export type TStatus = 'pending' | 'approved' | 'rejected' | 'completed';
 
 export interface ISummary {
+  total_request: number;
   total_pending: number;
   total_approved: number;
   total_rejected: number;

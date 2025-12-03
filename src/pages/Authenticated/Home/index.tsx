@@ -3,12 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import { getAuth } from '@/utils';
 import { useEffect, useState } from 'react';
 import { useGetRequests, useGetSummary } from '@/services/useRequest';
-import { TypographyH3 } from '@/components/ui/typography';
+import { TypographyH3, TypographyP } from '@/components/ui/typography';
 import { cn } from '@/lib/utils';
 import RequestTable from '@/components/RequestTable';
 import { Button } from '@/components/ui/button';
 import EmptyData from '@/assets/illustrations/empty-data.svg';
-import { Plus } from 'lucide-react';
+import { Check, CheckCheck, Clock3, Files, Plus, X } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import {
   searchRequestSchema,
@@ -22,12 +22,12 @@ const Card = ({
   className,
 }: {
   children: React.ReactNode;
-  className: string;
+  className?: string;
 }) => {
   return (
     <div
       className={cn(
-        'w-56 h-56 bg-gray-300 p-4 flex flex-col justify-between rounded-xl',
+        'w-1/4 shadow p-4 flex items-center justify-between rounded-lg',
         className
       )}
     >
@@ -88,38 +88,64 @@ const HomePage = () => {
         )}
       >
         {!isLoadingSummary ? (
-          <div className='flex w-full justify-between'>
-            <Card className='bg-blue-100'>
-              <span className='font-bold text-xl text-left'>Total Request</span>
-              <span className='font-bold text-7xl text-right'>
-                {summaryData?.data.total_approved}
-              </span>
+          <div className='flex w-full justify-between gap-4'>
+            <Card>
+              <div className='flex flex-col'>
+                <TypographyP>Total Request</TypographyP>
+                <span className='font-bold text-2xl'>
+                  {summaryData?.data.total_request}
+                </span>
+              </div>
+              <div className='w-10 h-10 bg-gray-200 rounded-lg flex justify-center items-center'>
+                <Files className='w-5 h-5 text-gray-700' />
+              </div>
             </Card>
-            <Card className='bg-yellow-100'>
-              <span className='font-bold text-xl text-left'>
-                Request in Progress
-              </span>
-              <span className='font-bold text-7xl text-right'>
-                {summaryData?.data.total_pending}
-              </span>
+            <Card>
+              <div className='flex flex-col'>
+                <TypographyP>In Progress</TypographyP>
+                <span className='font-bold text-2xl'>
+                  {summaryData?.data.total_pending}
+                </span>
+              </div>
+              <div className='w-10 h-10 bg-yellow-200 rounded-lg flex justify-center items-center'>
+                <Clock3 className='w-5 h-5 text-yellow-700' />
+              </div>
             </Card>
 
-            <Card className='bg-red-100'>
-              <span className='font-bold text-xl text-left'>
-                Request Rejected
-              </span>
-              <span className='font-bold text-7xl text-right'>
-                {summaryData?.data.total_rejected}
-              </span>
+            <Card>
+              <div className='flex flex-col'>
+                <TypographyP>Approved</TypographyP>
+                <span className='font-bold text-2xl'>
+                  {summaryData?.data.total_approved}
+                </span>
+              </div>
+              <div className='w-10 h-10 bg-blue-200 rounded-lg flex justify-center items-center'>
+                <Check className='w-5 h-5 text-blue-700' />
+              </div>
             </Card>
 
-            <Card className='bg-green-100'>
-              <span className='font-bold text-xl text-left'>
-                Request Completed
-              </span>
-              <span className='font-bold text-7xl text-right'>
-                {summaryData?.data.total_completed}
-              </span>
+            <Card>
+              <div className='flex flex-col'>
+                <TypographyP>Rejected</TypographyP>
+                <span className='font-bold text-2xl'>
+                  {summaryData?.data.total_approved}
+                </span>
+              </div>
+              <div className='w-10 h-10 bg-red-200 rounded-lg flex justify-center items-center'>
+                <X className='w-5 h-5 text-red-700' />
+              </div>
+            </Card>
+
+            <Card>
+              <div className='flex flex-col'>
+                <TypographyP>Completed</TypographyP>
+                <span className='font-bold text-2xl'>
+                  {summaryData?.data.total_completed}
+                </span>
+              </div>
+              <div className='w-10 h-10 bg-green-200 rounded-lg flex justify-center items-center'>
+                <CheckCheck className='w-5 h-5 text-green-700' />
+              </div>
             </Card>
           </div>
         ) : (
