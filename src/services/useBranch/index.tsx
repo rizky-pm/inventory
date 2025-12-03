@@ -5,6 +5,7 @@ import type { IBaseResponse, IBranch } from '@/types';
 interface IGetBranchesRequest {
   page: number;
   size: number;
+  search?: string;
 }
 
 interface IGetBranchesResponse extends IBaseResponse {
@@ -44,9 +45,15 @@ interface IDeleteBranchResponse extends IBaseResponse {
 
 export const useGetBranches = (params: IGetBranchesRequest) => {
   return useQuery({
-    queryKey: ['branch.get-branches', params.page, params.size],
+    queryKey: ['branch.get-branches', params],
     queryFn: async () => {
-      const response = await privateApi.get<IGetBranchesResponse>('/branches');
+      const response = await privateApi.get<IGetBranchesResponse>('/branches', {
+        params: {
+          page: params.page,
+          size: params.size,
+          search: params.search || undefined,
+        },
+      });
 
       return response.data;
     },

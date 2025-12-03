@@ -7,6 +7,13 @@ import React, { useEffect, useState } from 'react';
 import { DataTable } from './components/DataTable';
 import { columns } from './components/DataTable/columns';
 import AddBranchDialog from './components/AddBranchDialog';
+import SearchBranch from './components/SearchBranch';
+import { useForm } from 'react-hook-form';
+import {
+  searchBranchSchema,
+  type SearchBranchType,
+} from './components/SearchBranch/schema';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 const BranchesPage = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -18,6 +25,13 @@ const BranchesPage = () => {
     pageSize: 10,
   });
 
+  const form = useForm<SearchBranchType>({
+    resolver: zodResolver(searchBranchSchema),
+    defaultValues: {
+      branchName: '',
+    },
+  });
+
   const {
     data: branchResponse,
     isLoading,
@@ -26,6 +40,7 @@ const BranchesPage = () => {
   } = useGetBranches({
     page: pagination.pageIndex,
     size: pagination.pageSize,
+    search: form.getValues('branchName'),
   });
 
   useEffect(() => {
@@ -43,6 +58,7 @@ const BranchesPage = () => {
         ) : (
           <div className='container mx-auto py-4 space-y-2'>
             <div className='flex justify-between items-end'>
+              <SearchBranch form={form} refetch={refetch} />
               <Button
                 aria-label='Add branch'
                 onClick={() => {
