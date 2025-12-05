@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { TypographyH3 } from '@/components/ui/typography';
 import { useGetBranches } from '@/services/useBranch';
 import { Plus } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { DataTable } from './components/DataTable';
 import { columns } from './components/DataTable/columns';
 import AddBranchDialog from './components/AddBranchDialog';

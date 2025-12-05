@@ -16,7 +16,7 @@ export const PdfViewer = ({ url }: { url: string }) => {
   return (
     <div style={{ height: '80vh', overflow: 'auto' }}>
       <Document file={url} onLoadSuccess={onLoadSuccess}>
-        {Array.from(new Array(numPages), (el, i) => (
+        {Array.from(new Array(numPages), (_, i) => (
           <Page key={i} pageNumber={i + 1} />
         ))}
       </Document>

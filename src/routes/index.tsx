@@ -1,6 +1,5 @@
 import AuthenticatedWrapper from '@/components/AuthenticatedWrapper';
 import UnauthenticatedWrapper from '@/components/UnauthenticatedWrapper';
-import AboutPage from '@/pages/Authenticated/About';
 import BranchesPage from '@/pages/Authenticated/Branches';
 import HomePage from '@/pages/Authenticated/Home';
 import ProductsPage from '@/pages/Authenticated/Products';
@@ -21,10 +20,6 @@ const router = createBrowserRouter([
       {
         path: 'products',
         element: <ProductsPage />,
-      },
-      {
-        path: 'about',
-        element: <AboutPage />,
       },
       {
         path: 'settings',
