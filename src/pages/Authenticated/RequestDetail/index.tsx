@@ -39,11 +39,7 @@ const RequestDetailPage = () => {
   const { hasRole } = useRole();
 
   const isBranchRole = hasRole([UserRole.Branch]);
-  const isNonBranchRole = hasRole([
-    UserRole.SuperAdmin,
-    UserRole.Supervisor,
-    UserRole.Staff,
-  ]);
+  const isNonBranchRole = hasRole([UserRole.Supervisor, UserRole.Staff]);
 
   const { products, total, clearCart } = useCartStore();
 
@@ -84,10 +80,6 @@ const RequestDetailPage = () => {
   }
 
   const handleCreateRequest = (values: TypeCreateRequestSchema) => {
-    console.log('click');
-
-    console.log(values);
-
     const payload = { ...values, files: [values.files], items: products };
     createRequest(payload, {
       onSuccess: () => {

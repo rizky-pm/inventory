@@ -10,7 +10,6 @@ export const useRole = () => {
     isBranch: role === UserRole.Branch,
     isStaff: role === UserRole.Staff,
     isSupervisor: role === UserRole.Supervisor,
-    isSuperAdmin: role === UserRole.SuperAdmin,
     hasRole: (roles: UserRole[]) => roles.includes(role),
   };
 };

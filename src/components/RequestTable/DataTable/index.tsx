@@ -138,7 +138,6 @@ export function RequestDataTable<TData, TValue>({
                   href='#'
                   isActive={page === currentPage}
                   onClick={(e) => {
-                    console.log('click');
                     e.preventDefault();
                     setPagination((prev) => ({ ...prev, pageIndex: page }));
                   }}

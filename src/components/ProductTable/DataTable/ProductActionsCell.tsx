@@ -35,11 +35,7 @@ const ProductActionsCell = (props: { product: IProduct | undefined }) => {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align='end'>
-          {hasRole([
-            UserRole.Staff,
-            UserRole.SuperAdmin,
-            UserRole.Supervisor,
-          ]) && (
+          {hasRole([UserRole.Staff, UserRole.Supervisor]) && (
             <>
               <DropdownMenuLabel
                 onClick={() => {

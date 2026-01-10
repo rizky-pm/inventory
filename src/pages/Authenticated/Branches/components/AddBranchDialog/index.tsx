@@ -62,8 +62,6 @@ const AddBranchDialog = (props: Props) => {
     useEditBranch();
 
   const onSubmit = (values: AddBranchType) => {
-    console.log(values);
-
     if (!branch) {
       addNewBranch(values, {
         onSuccess: async (data) => {

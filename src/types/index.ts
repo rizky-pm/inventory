@@ -2,7 +2,6 @@ export enum UserRole {
   Branch = 'branch',
   Staff = 'staff',
   Supervisor = 'supervisor',
-  SuperAdmin = 'superadmin',
 }
 
 export interface IMenu {

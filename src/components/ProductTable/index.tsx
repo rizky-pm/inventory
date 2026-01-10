@@ -64,11 +64,7 @@ const ProductTable = (props: Props) => {
       <div className='flex justify-between items-end'>
         <SearchProduct form={form} refetch={refetch} />
 
-        {hasRole([
-          UserRole.SuperAdmin,
-          UserRole.Supervisor,
-          UserRole.Staff,
-        ]) && (
+        {hasRole([UserRole.Supervisor, UserRole.Staff]) && (
           <Button
             aria-label='Add product'
             onClick={() => {

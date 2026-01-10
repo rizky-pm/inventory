@@ -6,33 +6,23 @@ export const MENU: IMenu[] = [
   {
     route: '/',
     label: 'Home',
-    roles: [
-      UserRole.Branch,
-      UserRole.Staff,
-      UserRole.SuperAdmin,
-      UserRole.Supervisor,
-    ],
+    roles: [UserRole.Branch, UserRole.Staff, UserRole.Supervisor],
   },
 
   {
     route: '/products',
     label: 'Products',
-    roles: [
-      UserRole.SuperAdmin,
-      UserRole.Staff,
-      UserRole.Supervisor,
-      UserRole.Branch,
-    ],
+    roles: [UserRole.Staff, UserRole.Supervisor, UserRole.Branch],
   },
   // {
   //   route: '/accounts',
   //   label: 'Accounts',
-  //   roles: [UserRole.SuperAdmin],
+  //   roles: [UserRole.SuperVisor],
   // },
   {
     route: '/branches',
     label: 'Branches',
-    roles: [UserRole.SuperAdmin, UserRole.Supervisor],
+    roles: [UserRole.Supervisor],
   },
 ];
 

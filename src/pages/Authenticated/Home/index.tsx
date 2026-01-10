@@ -38,7 +38,7 @@ const Card = ({
 
 const HomePage = () => {
   const navigate = useNavigate();
-  const { username, branch } = getAuth();
+  const { username, branch, role } = getAuth();
 
   const [pagination, setPagination] = useState<{
     pageIndex: number;
@@ -157,15 +157,17 @@ const HomePage = () => {
               <div className='flex justify-between items-center'>
                 <SearchRequest form={form} refetch={refetch} />
 
-                <Button
-                  className='ml-auto'
-                  onClick={() => {
-                    navigate('/products');
-                  }}
-                >
-                  <Plus />
-                  Create new request
-                </Button>
+                {role === 'branch' ? (
+                  <Button
+                    className='ml-auto'
+                    onClick={() => {
+                      navigate('/products');
+                    }}
+                  >
+                    <Plus />
+                    Create new request
+                  </Button>
+                ) : null}
               </div>
               <RequestTable
                 pagination={pagination}

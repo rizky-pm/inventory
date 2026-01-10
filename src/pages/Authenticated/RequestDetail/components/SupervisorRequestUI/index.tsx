@@ -85,11 +85,10 @@ const SupervisorRequestUI = ({
 
   const isReadyToBeCompleted =
     request.current_status === 'approved' &&
-    hasRole([UserRole.Staff, UserRole.SuperAdmin, UserRole.Supervisor]);
+    hasRole([UserRole.Staff, UserRole.Supervisor]);
 
   const pickedUpAt = useMemo(() => {
     if (request.status_histories[0].status === 'completed') {
-      console.log('hei');
       return request.status_histories[0].created_at;
     }
   }, [request.status_histories]);
