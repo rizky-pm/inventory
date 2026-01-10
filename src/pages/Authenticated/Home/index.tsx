@@ -2,7 +2,11 @@ import SectionWrapper from '@/components/SectionWrapper';
 import { useNavigate } from 'react-router-dom';
 import { getAuth } from '@/utils';
 import { useEffect, useState } from 'react';
-import { useGetRequests, useGetSummary } from '@/services/useRequest';
+import {
+  useExportRequest,
+  useGetRequests,
+  useGetSummary,
+} from '@/services/useRequest';
 import { TypographyH3, TypographyP } from '@/components/ui/typography';
 import { cn } from '@/lib/utils';
 import RequestTable from '@/components/RequestTable';
@@ -67,6 +71,31 @@ const HomePage = () => {
   });
 
   const { data: summaryData, isLoading: isLoadingSummary } = useGetSummary();
+  const {
+    data: exportedRequests,
+    isLoading: exportingRequests,
+    refetch: exportRequests,
+  } = useExportRequest();
+
+  const onClickExport = () => {
+    exportRequests();
+  };
+
+  console.log(exportedRequests);
+
+  useEffect(() => {
+    if (!exportedRequests) return;
+
+    const blob = new Blob([exportedRequests.data]);
+    const url = window.URL.createObjectURL(blob);
+
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'requests.xlsx';
+    a.click();
+
+    window.URL.revokeObjectURL(url);
+  }, [exportedRequests]);
 
   useEffect(() => {
     if (pagination.pageIndex > 1) {
@@ -166,6 +195,12 @@ const HomePage = () => {
                   >
                     <Plus />
                     Create new request
+                  </Button>
+                ) : null}
+
+                {role === 'supervisor' ? (
+                  <Button onClick={onClickExport} disabled={exportingRequests}>
+                    Export
                   </Button>
                 ) : null}
               </div>

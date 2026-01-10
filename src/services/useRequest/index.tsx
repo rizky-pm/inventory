@@ -163,3 +163,17 @@ export const useCompleteRequest = () => {
     },
   });
 };
+
+export const useExportRequest = () => {
+  return useQuery({
+    queryKey: ['request.export'],
+    queryFn: async () => {
+      const response = await privateApi.get('/requests/export', {
+        responseType: 'blob',
+      });
+
+      return response;
+    },
+    enabled: false,
+  });
+};
