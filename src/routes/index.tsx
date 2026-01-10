@@ -26,10 +26,10 @@ const router = createBrowserRouter([
         element: <SettingsPage />,
       },
 
-      {
-        path: 'accounts',
-        element: <SettingsPage />,
-      },
+      // {
+      //   path: 'accounts',
+      //   element: <SettingsPage />,
+      // },
       {
         path: 'branches',
         element: <BranchesPage />,
