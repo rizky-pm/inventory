@@ -60,6 +60,7 @@ const ProductActionsCell = (props: { product: IProduct | undefined }) => {
 
           {hasRole([UserRole.Branch]) && (
             <DropdownMenuLabel
+              className='cursor-pointer'
               onClick={() => {
                 if (product) {
                   if (product.stock === 1) {
