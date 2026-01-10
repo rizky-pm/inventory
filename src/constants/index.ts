@@ -24,12 +24,11 @@ export const MENU: IMenu[] = [
       UserRole.Branch,
     ],
   },
-
-  {
-    route: '/accounts',
-    label: 'Accounts',
-    roles: [UserRole.SuperAdmin],
-  },
+  // {
+  //   route: '/accounts',
+  //   label: 'Accounts',
+  //   roles: [UserRole.SuperAdmin],
+  // },
   {
     route: '/branches',
     label: 'Branches',
