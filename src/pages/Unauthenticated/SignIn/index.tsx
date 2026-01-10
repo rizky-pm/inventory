@@ -49,6 +49,7 @@ const SignInPage = () => {
   const onSignIn = (values: TypeSignInSchema) => {
     signInUser(values, {
       onSuccess: (response) => {
+        console.log('Success');
         const data = {
           ...response.data.user,
           ...response.data.tokens,
@@ -58,10 +59,11 @@ const SignInPage = () => {
         navigate('/', { replace: true });
       },
       onError: (error) => {
+        console.log('Error');
         if (error instanceof AxiosError) {
           const message = error.response?.data?.message;
           console.error(message);
-          toast.error(message);
+          toast.error(message || 'Unexpected error, please try again later.');
         } else {
           console.error(error);
           toast.error('Unexpected error, please try again later.');

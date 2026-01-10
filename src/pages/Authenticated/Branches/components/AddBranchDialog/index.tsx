@@ -1,5 +1,5 @@
 import { useQueryClient } from '@tanstack/react-query';
-import { useEffect, type SetStateAction } from 'react';
+import { useEffect, useState, type SetStateAction } from 'react';
 import { useForm } from 'react-hook-form';
 import type { IBranch } from '@/types';
 import { addBranchSchema, type AddBranchType } from './schema';
@@ -28,6 +28,7 @@ import { useAddNewBranch, useEditBranch } from '@/services/useBranch';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
+import { TypographyH4, TypographyP } from '@/components/ui/typography';
 
 interface Props {
   isDialogOpen: boolean;
@@ -46,6 +47,15 @@ const AddBranchDialog = (props: Props) => {
     },
   });
 
+  const [showUserCredential, setShowUserCredential] = useState(false);
+  const [userCredential, setUserCredential] = useState<{
+    username: string;
+    password: string;
+  }>({
+    username: '',
+    password: '',
+  });
+
   const { mutate: addNewBranch, isPending: isAddNewBranchPending } =
     useAddNewBranch();
   const { mutate: editBranch, isPending: isPendingEditBranch } =
@@ -56,11 +66,16 @@ const AddBranchDialog = (props: Props) => {
 
     if (!branch) {
       addNewBranch(values, {
-        onSuccess: async () => {
+        onSuccess: async (data) => {
           setIsDialogOpen(false);
           await queryClient.invalidateQueries({
             queryKey: ['branch.get-branches'],
           });
+          setUserCredential({
+            username: data.data.account.username,
+            password: data.data.account.password,
+          });
+          setShowUserCredential(true);
           toast.success('Success add new branch');
         },
         onError: (error) => {
@@ -100,88 +115,113 @@ const AddBranchDialog = (props: Props) => {
   }, [branch, form]);
 
   return (
-    <Dialog
-      open={isDialogOpen}
-      onOpenChange={(isOpen) => {
-        if (!isOpen) {
-          setIsDialogOpen(isOpen);
-          form.reset();
-        }
-      }}
-    >
-      <DialogContent className='sm:max-w-[425px]'>
-        <DialogHeader>
-          <DialogTitle>Add New Branch</DialogTitle>
-          <DialogDescription>
-            Enter the branch details below to register a new branch in the
-            system.
-          </DialogDescription>
-        </DialogHeader>
+    <>
+      <Dialog
+        open={isDialogOpen}
+        onOpenChange={(isOpen) => {
+          if (!isOpen) {
+            setIsDialogOpen(isOpen);
+            form.reset();
+          }
+        }}
+      >
+        <DialogContent className='sm:max-w-[425px]'>
+          <DialogHeader>
+            <DialogTitle>Add New Branch</DialogTitle>
+            <DialogDescription>
+              Enter the branch details below to register a new branch in the
+              system.
+            </DialogDescription>
+          </DialogHeader>
 
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
-            <FormField
-              control={form.control}
-              name='name'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Name</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder='Branch name'
-                      autoComplete='off'
-                      disabled={isPendingEditBranch || isPendingEditBranch}
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
+              <FormField
+                control={form.control}
+                name='name'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Name</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder='Branch name'
+                        autoComplete='off'
+                        disabled={isPendingEditBranch || isPendingEditBranch}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-            <FormField
-              control={form.control}
-              name='address'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Address</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      placeholder={'Branch address'}
-                      autoComplete='off'
-                      disabled={isPendingEditBranch || isPendingEditBranch}
-                      {...field}
-                      maxLength={50}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+              <FormField
+                control={form.control}
+                name='address'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Address</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        placeholder={'Branch address'}
+                        autoComplete='off'
+                        disabled={isPendingEditBranch || isPendingEditBranch}
+                        {...field}
+                        maxLength={50}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-            <DialogFooter>
-              <DialogClose asChild>
+              <DialogFooter>
+                <DialogClose asChild>
+                  <Button
+                    variant='outline'
+                    disabled={isAddNewBranchPending || isPendingEditBranch}
+                  >
+                    Cancel
+                  </Button>
+                </DialogClose>
                 <Button
-                  variant='outline'
+                  type='submit'
                   disabled={isAddNewBranchPending || isPendingEditBranch}
                 >
-                  Cancel
+                  {isAddNewBranchPending || isPendingEditBranch ? (
+                    <Spinner />
+                  ) : null}
+                  {!branch ? 'Add Branch' : 'Edit Branch'}
                 </Button>
-              </DialogClose>
-              <Button
-                type='submit'
-                disabled={isAddNewBranchPending || isPendingEditBranch}
-              >
-                {isAddNewBranchPending || isPendingEditBranch ? (
-                  <Spinner />
-                ) : null}
-                {!branch ? 'Add Branch' : 'Edit Branch'}
-              </Button>
-            </DialogFooter>
-          </form>
-        </Form>
-      </DialogContent>
-    </Dialog>
+              </DialogFooter>
+            </form>
+          </Form>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={showUserCredential} onOpenChange={setShowUserCredential}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Branch Account</DialogTitle>
+            <DialogDescription>
+              Copy and paste account credential below for sign in to branch
+              account
+            </DialogDescription>
+
+            <div className='flex flex-col'>
+              <div className='flex flex-col'>
+                <TypographyH4>Username</TypographyH4>
+                <TypographyP>{userCredential.username}</TypographyP>
+              </div>
+              <div className='flex flex-col'>
+                <TypographyH4>Password</TypographyH4>
+                <TypographyP>{userCredential.password}</TypographyP>
+              </div>
+            </div>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 };
 
