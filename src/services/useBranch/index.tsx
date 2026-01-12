@@ -19,7 +19,13 @@ interface IAddNewBranchRequest {
 
 interface IAddNewBranchResponse extends IBaseResponse {
   data: {
-    id: string;
+    branch: {
+      id: string;
+    };
+    account: {
+      username: string;
+      password: string;
+    };
   };
 }
 

@@ -157,7 +157,7 @@ const HomePage = () => {
               <div className='flex flex-col'>
                 <TypographyP>Rejected</TypographyP>
                 <span className='font-bold text-2xl'>
-                  {summaryData?.data.total_approved}
+                  {summaryData?.data.total_rejected}
                 </span>
               </div>
               <div className='w-10 h-10 bg-red-200 rounded-lg flex justify-center items-center'>
